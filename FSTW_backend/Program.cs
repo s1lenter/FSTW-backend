@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 
 namespace FSTW_backend
 {
@@ -10,6 +11,9 @@ namespace FSTW_backend
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
             var app = builder.Build();
 

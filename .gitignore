@@ -232,3 +232,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Игнорировать локальные конфиги разработчика
+appsettings.Development.json
