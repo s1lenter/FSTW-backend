@@ -1,3 +1,4 @@
+using FSTW_backend.Middlewares;
 using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,6 +22,7 @@ namespace FSTW_backend
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAuthTokenService, AuthTokenService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -32,12 +34,15 @@ namespace FSTW_backend
                         ValidateAudience = true,
                         ValidAudience = builder.Configuration["AppSettings:Audience"],
                         ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:TokenKey"]!)),
                         ValidateIssuerSigningKey = true
                     };
                 });
 
             var app = builder.Build();
+
+            app.UseMiddleware<TokenHeaderMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {

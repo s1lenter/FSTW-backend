@@ -1,4 +1,6 @@
-﻿namespace FSTW_backend.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FSTW_backend.Models
 {
     public class User
     {

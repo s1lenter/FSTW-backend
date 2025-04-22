@@ -28,7 +28,7 @@ namespace FSTW_backend.Controllers
         [HttpPost("/login")]
         public IActionResult Login([FromForm] UserAuthDto userAuthDto)
         {
-            var response = _authService.Login(userAuthDto);
+            var response = _authService.Login(userAuthDto, HttpContext);
             if (response is null)
                 return BadRequest("Error");
             return Ok("You are login!");

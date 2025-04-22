@@ -7,8 +7,6 @@ namespace FSTW_backend.Services
     {
         public User Register(UserAuthDto userDto);
 
-        public User Login(UserAuthDto userDto);
-
-        public string CreateToken(User user);
+        public User Login(UserAuthDto userDto, HttpContext httpContext);
     }
 }
