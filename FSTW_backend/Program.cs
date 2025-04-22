@@ -1,3 +1,4 @@
+using FSTW_backend.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSTW_backend
@@ -15,6 +16,8 @@ namespace FSTW_backend
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -25,8 +28,8 @@ namespace FSTW_backend
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 
