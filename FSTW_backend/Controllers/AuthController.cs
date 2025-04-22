@@ -1,5 +1,6 @@
 ﻿using FSTW_backend.Dto;
 using FSTW_backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,13 @@ namespace FSTW_backend.Controllers
             if (response is null)
                 return BadRequest("Error");
             return Ok("You are login!");
+        }
+
+        [Authorize]
+        [HttpGet("/secret")]
+        public IActionResult OnlyAuthorizeEndpoint()
+        {
+            return Ok("You authorized!");
         }
     }
 }
