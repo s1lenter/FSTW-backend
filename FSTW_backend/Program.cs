@@ -34,7 +34,7 @@ namespace FSTW_backend
                         ValidateAudience = true,
                         ValidAudience = builder.Configuration["AppSettings:Audience"],
                         ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero,
+                        //ClockSkew = TimeSpan.Zero,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:TokenKey"]!)),
                         ValidateIssuerSigningKey = true
                     };

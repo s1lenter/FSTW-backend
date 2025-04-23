@@ -2,7 +2,7 @@
 {
     public class TokenHeaderMiddleware
     {
-        RequestDelegate _next;
+        private readonly RequestDelegate _next;
         public TokenHeaderMiddleware(RequestDelegate next)
         {
             _next = next;

@@ -35,7 +35,7 @@ namespace FSTW_backend.Services
             return user;
         }
 
-        public User? Login(UserAuthDto userDto, HttpContext httpContext)
+        public TokenResponseDto? Login(UserAuthDto userDto, HttpContext httpContext)
         {
             var user = _repository.GetUser(userDto);
             if (user is null)
@@ -44,11 +44,33 @@ namespace FSTW_backend.Services
             if (new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, userDto.Password) 
                 == PasswordVerificationResult.Success)
             {
-                httpContext.Response.Cookies.Append("token", _tokenService.CreateToken(user));
-                return user;
+                var accessToken = _tokenService.CreateToken(user);
+                httpContext.Response.Cookies.Append("token", accessToken);
+                var refreshToken = _tokenService.GenearateAndSaveRefreshToken(user);
+                return new TokenResponseDto
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                };
             }
 
             return null;
+        }
+
+        public string? RefreshAccessToken(RefreshTokenRequestDto refreshTokenRequestDto, string accessToken)
+        {
+            if (_repository.GetUser(refreshTokenRequestDto.UserId) is null)
+                return null;
+
+            var principal = _tokenService.GetClaimsFromToken(accessToken);
+            var refreshToken = _repository.GetRefreshToken(refreshTokenRequestDto.RefreshToken);
+
+            if (refreshToken == null || refreshToken.RefreshTokenExpiryTime < DateTime.UtcNow)
+                return null;
+
+            var newAccessToken = _tokenService.UpdateAccessToken(principal.Claims);
+
+            return newAccessToken;
         }
     }
 }

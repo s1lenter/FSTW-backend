@@ -5,8 +5,10 @@ namespace FSTW_backend.Services
 {
     public interface IAuthService
     {
-        public User Register(UserAuthDto userDto);
+        public User? Register(UserAuthDto userDto);
 
-        public User Login(UserAuthDto userDto, HttpContext httpContext);
+        public TokenResponseDto? Login(UserAuthDto userDto, HttpContext httpContext);
+
+        public string? RefreshAccessToken(RefreshTokenRequestDto refreshTokenRequestDto, string accessToken);
     }
 }

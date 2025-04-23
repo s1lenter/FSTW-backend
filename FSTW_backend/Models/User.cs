@@ -13,5 +13,6 @@ namespace FSTW_backend.Models
         public List<Favorite> Favorites { get; set; }
         public Profile Profile { get; set; }
         public List<Resume> Resumes { get; set; }
+        public RefreshToken RefreshToken { get; set; }
     }
 }

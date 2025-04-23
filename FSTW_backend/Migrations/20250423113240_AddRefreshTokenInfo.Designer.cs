@@ -3,6 +3,7 @@ using System;
 using FSTW_backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FSTW_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423113240_AddRefreshTokenInfo")]
+    partial class AddRefreshTokenInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,31 +290,6 @@ namespace FSTW_backend.Migrations
                     b.ToTable("Project");
                 });
 
-            modelBuilder.Entity("FSTW_backend.Models.RefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("RefreshTokenExpiryTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("RefreshToken");
-                });
-
             modelBuilder.Entity("FSTW_backend.Models.Requirement", b =>
                 {
                     b.Property<int>("Id")
@@ -428,6 +406,12 @@ namespace FSTW_backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.ToTable("User");
@@ -525,17 +509,6 @@ namespace FSTW_backend.Migrations
                     b.Navigation("Resume");
                 });
 
-            modelBuilder.Entity("FSTW_backend.Models.RefreshToken", b =>
-                {
-                    b.HasOne("FSTW_backend.Models.User", "User")
-                        .WithOne("RefreshToken")
-                        .HasForeignKey("FSTW_backend.Models.RefreshToken", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("FSTW_backend.Models.Requirement", b =>
                 {
                     b.HasOne("FSTW_backend.Models.Internship", "Internship")
@@ -611,9 +584,6 @@ namespace FSTW_backend.Migrations
                     b.Navigation("Favorites");
 
                     b.Navigation("Profile")
-                        .IsRequired();
-
-                    b.Navigation("RefreshToken")
                         .IsRequired();
 
                     b.Navigation("Resumes");

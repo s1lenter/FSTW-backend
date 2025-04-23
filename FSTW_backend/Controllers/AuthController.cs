@@ -31,7 +31,16 @@ namespace FSTW_backend.Controllers
             var response = _authService.Login(userAuthDto, HttpContext);
             if (response is null)
                 return BadRequest("Error");
-            return Ok("You are login!");
+            return Ok(response);
+        }
+
+        [HttpPost("/refresh")]
+        public ActionResult<string> RefreshAccessToken([FromBody] RefreshTokenRequestDto refreshRequestTokenDto)
+        {
+            var newAccessToken = _authService.RefreshAccessToken(refreshRequestTokenDto, HttpContext.Request.Headers.Authorization.ToString().Split()[1]);
+            if (newAccessToken is null)
+                return BadRequest("Invalid refresh token");
+            return newAccessToken;
         }
 
         [Authorize]
