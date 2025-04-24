@@ -8,11 +8,11 @@ namespace FSTW_backend.Services
     {
         public string CreateToken(User user);
 
-        public string GenearateAndSaveRefreshToken(User user);
+        public Task<string> GenearateAndSaveRefreshTokenAsync(User user);
 
         public ClaimsPrincipal GetClaimsFromToken(string token);
 
-        public string RefreshToken(RefreshTokenRequestDto refreshTokenRequestDto, User user);
+        public Task<string> RefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto, User user);
 
         public string UpdateAccessToken(IEnumerable<Claim> claims);
     }

@@ -12,15 +12,15 @@ namespace FSTW_backend.Repositories
             _dbContext = context;
         }
 
-        public void CreateUser(User user)
+        public async Task CreateUserAsync(User user)
         {
-            _dbContext.User.Add(user);
-            _dbContext.SaveChanges();
+            await _dbContext.User.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void SaveRefreshToken(RefreshTokenRequestDto refreshTokenRequestDto)
+        public async Task SaveRefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto)
         {
-            var existToken = _dbContext.RefreshToken.FirstOrDefault(t => t.UserId == refreshTokenRequestDto.UserId);
+            var existToken = await _dbContext.RefreshToken.FirstOrDefaultAsync(t => t.UserId == refreshTokenRequestDto.UserId);
             if (existToken is not null)
             {
                 existToken.Token = refreshTokenRequestDto.RefreshToken;
@@ -34,34 +34,44 @@ namespace FSTW_backend.Repositories
                     UserId = refreshTokenRequestDto.UserId,
                     RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(10)
                 };
-                _dbContext.RefreshToken.Add(refreshToken);
+                await _dbContext.RefreshToken.AddAsync(refreshToken);
             }
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public User? GetUser(UserAuthDto userDto)
+        public async Task<User?> GetUserAync(UserRegisterDto userDto)
         {
-            return _dbContext.User.FirstOrDefault(u => u.Login == userDto.Login);
+            return await GetUserByUsernameAsync(userDto.Login);
         }
 
-        public User? GetUser(int id)
+        public async Task<User?> GetUserAync(UserLoginDto userDto)
         {
-            return _dbContext.User.FirstOrDefault(u => u.Id == id);
+            return await GetUserByUsernameAsync(userDto.Login);
         }
 
-        public User? GetUser(string userName)
+        public async Task<User?> GetUserAsync(int id)
         {
-            return _dbContext.User.FirstOrDefault(u => u.Login == userName);
+            return await _dbContext.User.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public RefreshToken? GetRefreshToken(string token)
+        public async Task<User?> GetUserByUsernameAsync(string userName)
         {
-            return _dbContext.RefreshToken.FirstOrDefault(t => t.Token == token);
+            return await _dbContext.User.FirstOrDefaultAsync(u => u.Login == userName);
         }
 
-        public void DeleteRefreshToken(int userId)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            var token = _dbContext.RefreshToken.FirstOrDefault(t => t.UserId == userId);
+            return await _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<RefreshToken?> GetRefreshTokenAsync(string token)
+        {
+            return await _dbContext.RefreshToken.FirstOrDefaultAsync(t => t.Token == token);
+        }
+
+        public async Task DeleteRefreshTokenAsync(int userId)
+        {
+            var token = await _dbContext.RefreshToken.FirstOrDefaultAsync(t => t.UserId == userId);
             if (token is not null)
                 _dbContext.RefreshToken.Remove(token);
         }

@@ -29,10 +29,10 @@ namespace FSTW_backend.Services
             return Convert.ToBase64String(randomNumber);
         }
 
-        public string GenearateAndSaveRefreshToken(User user)
+        public async Task<string> GenearateAndSaveRefreshTokenAsync(User user)
         {
             var refreshToken = CreateRefreshToken(user);
-            _repository.SaveRefreshToken(new RefreshTokenRequestDto() { RefreshToken = refreshToken, UserId = user.Id});
+            await _repository.SaveRefreshTokenAsync(new RefreshTokenRequestDto() { RefreshToken = refreshToken, UserId = user.Id});
             return refreshToken;
         }
 
@@ -91,18 +91,18 @@ namespace FSTW_backend.Services
             return principal;
         }
 
-        private RefreshToken? ValidateToken(RefreshTokenRequestDto refreshTokenRequestDto)
+        private async Task<RefreshToken?> ValidateTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto)
         {
-            var refreshToken = _repository.GetRefreshToken(refreshTokenRequestDto.RefreshToken);
+            var refreshToken = await _repository.GetRefreshTokenAsync(refreshTokenRequestDto.RefreshToken);
             if (refreshToken == null || refreshTokenRequestDto.RefreshToken != refreshToken.Token || 
                 refreshToken.RefreshTokenExpiryTime <= DateTime.UtcNow)
                 return null;
             return refreshToken;
         }
 
-        public string RefreshToken(RefreshTokenRequestDto refreshTokenRequestDto, User user)
+        public async Task<string> RefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto, User user)
         {
-            var validateRefreshToken = ValidateToken(refreshTokenRequestDto);
+            var validateRefreshToken = await ValidateTokenAsync(refreshTokenRequestDto);
             if (validateRefreshToken is null)
                 return null;
             return CreateToken(user);

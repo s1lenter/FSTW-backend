@@ -7,7 +7,7 @@ namespace FSTW_backend.Mapping
 {
     public static class AuthUserMapper
     {
-        public static User Map(UserAuthDto userDto)
+        public static User Map(UserRegisterDto userDto)
         {
             var user = new User();
             user.Login = userDto.Login;

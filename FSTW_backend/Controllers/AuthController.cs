@@ -1,4 +1,5 @@
 ﻿using FSTW_backend.Dto;
+using FSTW_backend.Models;
 using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,39 +18,46 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("/register")]
-        public IActionResult Register([FromForm] UserAuthDto userAuthDto)
+        public async Task<IActionResult> Register([FromForm] UserRegisterDto userAuthDto)
         {
-            var response = _authService.Register(userAuthDto);
-            if (response is null)
-                return BadRequest("Error");
-            return Ok(response);
+            var response = await _authService.RegisterAsync(userAuthDto);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Error);
         }
 
         [HttpPost("/login")]
-        public IActionResult Login([FromForm] UserAuthDto userAuthDto)
+        public async Task<IActionResult> LoginAsync([FromForm] UserLoginDto UserLoginDto)
         {
-            var response = _authService.Login(userAuthDto, HttpContext);
-            if (response is null)
-                return BadRequest("Error");
-            return Ok(response);
+            var response = await _authService.LoginAsync(UserLoginDto, HttpContext);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Error);
+
         }
 
         [HttpPost("/logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            var response = _authService.Logout(HttpContext);
+            var response = await _authService.LogoutAsync(HttpContext);
             if (response is not null)
                 return Ok();
             return BadRequest("Error!");
         }
 
         [HttpPost("/refresh")]
-        public ActionResult<string> RefreshAccessToken([FromBody] RefreshTokenRequestDto refreshRequestTokenDto)
+        public async Task<IActionResult> RefreshAccessToken([FromBody] string refreshToken)
         {
-            var newAccessToken = _authService.RefreshAccessToken(refreshRequestTokenDto, HttpContext.Request.Headers.Authorization.ToString().Split()[1], HttpContext);
-            if (newAccessToken is null)
-                return BadRequest("Invalid refresh token or user id");
-            return newAccessToken;
+            var userClaims = HttpContext.User.Claims.ToList();
+            if (userClaims.Count == 0)
+                return Unauthorized();
+
+            var userId = userClaims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
+            var response = await _authService.RefreshAccessTokenAsync(refreshToken, int.Parse(userId),
+                HttpContext.Request.Headers.Authorization.ToString().Split()[1], HttpContext);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Error);
         }
 
         [Authorize]

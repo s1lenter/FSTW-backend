@@ -6,12 +6,12 @@ namespace FSTW_backend.Services
 {
     public interface IAuthService
     {
-        public User? Register(UserAuthDto userDto);
+        public Task<ResponseResult<User>> RegisterAsync(UserRegisterDto userDto);
 
-        public TokenResponseDto? Login(UserAuthDto userDto, HttpContext httpContext);
+        public Task<ResponseResult<TokenResponseDto?>> LoginAsync(UserLoginDto userLoginDto, HttpContext httpContext);
 
-        public string Logout(HttpContext context);
+        public Task<ResponseResult<string>> LogoutAsync(HttpContext context);
 
-        public string? RefreshAccessToken(RefreshTokenRequestDto refreshTokenRequestDto, string accessToken, HttpContext httpContext);
+        public Task<ResponseResult<string>> RefreshAccessTokenAsync(string refreshToken, int userId, string accessToken, HttpContext httpContext);
     }
 }

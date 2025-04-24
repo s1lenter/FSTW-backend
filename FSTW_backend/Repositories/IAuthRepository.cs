@@ -6,18 +6,22 @@ namespace FSTW_backend.Repositories
 {
     public interface IAuthRepository
     {
-        public User? GetUser(UserAuthDto user);
+        public Task<User?> GetUserAync(UserRegisterDto user);
 
-        public User? GetUser(int id);
+        public Task<User?> GetUserAync(UserLoginDto user);
 
-        public void CreateUser(User userDto);
+        public Task<User?> GetUserAsync(int id);
 
-        public void SaveRefreshToken(RefreshTokenRequestDto refreshTokenRequestDto);
+        public Task CreateUserAsync(User userDto);
 
-        public RefreshToken GetRefreshToken(string token);
+        public Task SaveRefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto);
 
-        public User? GetUser(string userName);
+        public Task<RefreshToken> GetRefreshTokenAsync(string token);
 
-        public void DeleteRefreshToken(int userId);
+        public Task<User?> GetUserByUsernameAsync(string userName);
+
+        public Task<User?> GetUserByEmailAsync(string email);
+
+        public Task DeleteRefreshTokenAsync(int userId);
     }
 }
