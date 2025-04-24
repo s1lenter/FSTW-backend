@@ -58,5 +58,12 @@ namespace FSTW_backend.Repositories
         {
             return _dbContext.RefreshToken.FirstOrDefault(t => t.Token == token);
         }
+
+        public void DeleteRefreshToken(int userId)
+        {
+            var token = _dbContext.RefreshToken.FirstOrDefault(t => t.UserId == userId);
+            if (token is not null)
+                _dbContext.RefreshToken.Remove(token);
+        }
     }
 }

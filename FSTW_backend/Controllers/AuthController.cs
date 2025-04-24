@@ -34,12 +34,21 @@ namespace FSTW_backend.Controllers
             return Ok(response);
         }
 
+        [HttpPost("/logout")]
+        public IActionResult Logout()
+        {
+            var response = _authService.Logout(HttpContext);
+            if (response is not null)
+                return Ok();
+            return BadRequest("Error!");
+        }
+
         [HttpPost("/refresh")]
         public ActionResult<string> RefreshAccessToken([FromBody] RefreshTokenRequestDto refreshRequestTokenDto)
         {
-            var newAccessToken = _authService.RefreshAccessToken(refreshRequestTokenDto, HttpContext.Request.Headers.Authorization.ToString().Split()[1]);
+            var newAccessToken = _authService.RefreshAccessToken(refreshRequestTokenDto, HttpContext.Request.Headers.Authorization.ToString().Split()[1], HttpContext);
             if (newAccessToken is null)
-                return BadRequest("Invalid refresh token");
+                return BadRequest("Invalid refresh token or user id");
             return newAccessToken;
         }
 

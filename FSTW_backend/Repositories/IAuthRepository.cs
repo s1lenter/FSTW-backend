@@ -17,5 +17,7 @@ namespace FSTW_backend.Repositories
         public RefreshToken GetRefreshToken(string token);
 
         public User? GetUser(string userName);
+
+        public void DeleteRefreshToken(int userId);
     }
 }

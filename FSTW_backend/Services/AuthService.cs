@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace FSTW_backend.Services
 {
@@ -57,7 +58,19 @@ namespace FSTW_backend.Services
             return null;
         }
 
-        public string? RefreshAccessToken(RefreshTokenRequestDto refreshTokenRequestDto, string accessToken)
+        public string Logout(HttpContext context)
+        {
+            var user = _repository.GetUser(context.User.Identity.Name);
+            if (user == null)
+                return null;
+
+            context.Response.Cookies.Delete("token");
+
+            _repository.DeleteRefreshToken(user.Id);
+            return "Ok";
+        }
+
+        public string? RefreshAccessToken(RefreshTokenRequestDto refreshTokenRequestDto, string accessToken, HttpContext httpContext)
         {
             if (_repository.GetUser(refreshTokenRequestDto.UserId) is null)
                 return null;
@@ -69,6 +82,9 @@ namespace FSTW_backend.Services
                 return null;
 
             var newAccessToken = _tokenService.UpdateAccessToken(principal.Claims);
+
+            httpContext.Response.Cookies.Delete("token");
+            httpContext.Response.Cookies.Append("token", newAccessToken);
 
             return newAccessToken;
         }
