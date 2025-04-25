@@ -1,11 +1,19 @@
-﻿namespace FSTW_backend.Dto
+﻿using FSTW_backend.Filters;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace FSTW_backend.Dto
 {
     public class UserRegisterDto
     {
         public string Login { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
 
-        public string PasswordRepeat { get; set; }
+        [EmailAddress(ErrorMessage = "Некорректный email")]
+        public string Email { get; set; }
+
+        [PasswordValidator]
+        public string? Password { get; set; }
+
+        public string? PasswordRepeat { get; set; }
     }
 }

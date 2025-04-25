@@ -1,4 +1,5 @@
 ﻿using FSTW_backend.Dto;
+using FSTW_backend.Filters;
 using FSTW_backend.Models;
 using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,7 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("/register")]
+        [RegistrationFilter]
         public async Task<IActionResult> Register([FromForm] UserRegisterDto userAuthDto)
         {
             var response = await _authService.RegisterAsync(userAuthDto);
