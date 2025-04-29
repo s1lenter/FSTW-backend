@@ -5,6 +5,7 @@ using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.WebRequestMethods;
 
 namespace FSTW_backend.Controllers
 {
@@ -19,7 +20,6 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("/register")]
-        [RegistrationFilter]
         public async Task<IActionResult> Register([FromForm] UserRegisterDto userAuthDto)
         {
             var response = await _authService.RegisterAsync(userAuthDto);
@@ -67,6 +67,17 @@ namespace FSTW_backend.Controllers
         public IActionResult OnlyAuthorizeEndpoint()
         {
             return Ok("You authorized!");
+        }
+
+        [HttpGet("/all")]
+        public IActionResult Endpoint()
+        {
+            var user = new[]
+            {
+                new { Name = "aaaa" },
+                new { Name = "bbbbb" }
+            };
+            return Ok(user);
         }
     }
 }

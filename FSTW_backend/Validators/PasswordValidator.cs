@@ -12,11 +12,11 @@ namespace FSTW_backend.Filters
                 return FailedValidate("Поле пароль явялется обязательным");
             if (password.Length < 8 || password.Length > 30)
                 return FailedValidate("Размер пароля от 8 до 30 символов");
-            else if (!HaveDigits(password))
+            if (!HaveDigits(password))
                 return FailedValidate("В пароле должны быть цифры");
-            else if (!HaveLetters(password))
+            if (!HaveLetters(password))
                 return FailedValidate("В пароле должны быть латинские буквы");
-            return false;
+            return true;
         }
 
         public bool FailedValidate(string errorMessage)

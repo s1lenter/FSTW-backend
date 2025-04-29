@@ -82,7 +82,7 @@ namespace FSTW_backend.Services
 
             if (savedRefreshToken is null)
                 return ResponseResult<string>.Failure("Неверный refresh токен");
-            else if (savedRefreshToken.RefreshTokenExpiryTime < DateTime.UtcNow)
+            if (savedRefreshToken.RefreshTokenExpiryTime < DateTime.UtcNow)
                 return ResponseResult<string>.Failure("Истек срок действия refresh токена");
 
             var newAccessToken = _tokenService.UpdateAccessToken(principal.Claims);

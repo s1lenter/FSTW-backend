@@ -1,11 +1,10 @@
-using FSTW_backend.Filters;
 using FSTW_backend.Middlewares;
 using FSTW_backend.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 namespace FSTW_backend
 {
@@ -14,6 +13,19 @@ namespace FSTW_backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5001", "http://localhost:3000", "http://localhost")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                        //policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    });
+            });
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
@@ -41,7 +53,10 @@ namespace FSTW_backend
                     };
                 });
 
+
             var app = builder.Build();
+
+            app.Logger.LogInformation(connectionString);
 
             app.UseMiddleware<TokenHeaderMiddleware>();
 
@@ -52,6 +67,8 @@ namespace FSTW_backend
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

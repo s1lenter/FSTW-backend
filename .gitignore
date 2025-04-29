@@ -235,3 +235,7 @@ _Pvt_Extensions
 
 # Игнорировать локальные конфиги разработчика
 appsettings.Development.json
+
+Dockerfile
+docker-compose.yml
+nginx.conf
