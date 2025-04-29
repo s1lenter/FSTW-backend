@@ -6,7 +6,7 @@ namespace FSTW_backend.Repositories
 {
     public interface IAuthRepository
     {
-        public Task<User?> GetUserAync(UserRegisterDto user);
+        public Task<User?> GetUserAync(UserRegisterRequestDto user);
 
         public Task<User?> GetUserAync(UserLoginDto user);
 

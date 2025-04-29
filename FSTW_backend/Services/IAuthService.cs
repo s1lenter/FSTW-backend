@@ -6,7 +6,7 @@ namespace FSTW_backend.Services
 {
     public interface IAuthService
     {
-        public Task<ResponseResult<User>> RegisterAsync(UserRegisterDto userDto);
+        public Task<ResponseResult<User>> RegisterAsync(UserRegisterRequestDto userDto);
 
         public Task<ResponseResult<TokenResponseDto?>> LoginAsync(UserLoginDto userLoginDto, HttpContext httpContext);
 

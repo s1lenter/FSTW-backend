@@ -23,7 +23,12 @@ namespace FSTW_backend
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
-                        //policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                        options.AddPolicy("SwaggerPolicy", policy =>
+                         {
+                             policy.WithOrigins("http://localhost:5072") 
+                                   .AllowAnyHeader()
+                                   .AllowAnyMethod();
+                         });
                     });
             });
 
@@ -31,11 +36,14 @@ namespace FSTW_backend
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAuthTokenService, AuthTokenService>();
+
+            builder.Services.AddScoped<IPersonalCabinetService, PersonalCabinetService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -60,6 +68,13 @@ namespace FSTW_backend
 
             app.UseMiddleware<TokenHeaderMiddleware>();
 
+            //app.Use(async (context, next) =>
+            //{
+            //    context.Response.Headers.Add("Access-Control-Expose-Headers", "*");
+            //    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            //    await next();
+            //});
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -69,6 +84,7 @@ namespace FSTW_backend
             app.UseHttpsRedirection();
 
             app.UseCors("CorsPolicy");
+            app.UseCors("SwaggerPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -16,6 +16,13 @@ namespace FSTW_backend.Repositories
         {
             await _dbContext.User.AddAsync(user);
             await _dbContext.SaveChangesAsync();
+
+            await _dbContext.Profile.AddAsync(new Profile
+            {
+                User = user,
+                UserId = user.Id
+            });
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task SaveRefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto)
@@ -39,7 +46,7 @@ namespace FSTW_backend.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User?> GetUserAync(UserRegisterDto userDto)
+        public async Task<User?> GetUserAync(UserRegisterRequestDto userDto)
         {
             return await GetUserByUsernameAsync(userDto.Login);
         }

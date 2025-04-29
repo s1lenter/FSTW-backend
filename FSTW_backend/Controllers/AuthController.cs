@@ -20,18 +20,18 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("/register")]
-        public async Task<IActionResult> Register([FromForm] UserRegisterDto userAuthDto)
+        public async Task<IActionResult> Register([FromForm] UserRegisterRequestDto userAuthDto)
         {
             var response = await _authService.RegisterAsync(userAuthDto);
             if (response.Successed)
-                return Ok(response.Value);
+                return Ok();
             return BadRequest(response.Error);
         }
 
         [HttpPost("/login")]
-        public async Task<IActionResult> LoginAsync([FromForm] UserLoginDto UserLoginDto)
+        public async Task<IActionResult> LoginAsync([FromForm] UserLoginDto userLoginDto)
         {
-            var response = await _authService.LoginAsync(UserLoginDto, HttpContext);
+            var response = await _authService.LoginAsync(userLoginDto, HttpContext);
             if (response.Successed)
                 return Ok(response.Value);
             return BadRequest(response.Error);
@@ -47,14 +47,12 @@ namespace FSTW_backend.Controllers
             return BadRequest("Error!");
         }
 
+        [Authorize]
         [HttpPost("/refresh")]
         public async Task<IActionResult> RefreshAccessToken([FromBody] string refreshToken)
         {
-            var userClaims = HttpContext.User.Claims.ToList();
-            if (userClaims.Count == 0)
-                return Unauthorized();
 
-            var userId = userClaims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
             var response = await _authService.RefreshAccessTokenAsync(refreshToken, int.Parse(userId),
                 HttpContext.Request.Headers.Authorization.ToString().Split()[1], HttpContext);
             if (response.Successed)

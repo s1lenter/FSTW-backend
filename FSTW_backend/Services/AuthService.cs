@@ -28,13 +28,13 @@ namespace FSTW_backend.Services
             _tokenService = tokenService;
         }
 
-        public async Task<ResponseResult<User>> RegisterAsync(UserRegisterDto userDto)
+        public async Task<ResponseResult<User>> RegisterAsync(UserRegisterRequestDto userDto)
         {
             if (userDto.Password != userDto.PasswordRepeat)
                 return ResponseResult<User>.Failure("Пароли не совпадают");
-            else if (await _repository.GetUserByUsernameAsync(userDto.Login) is not null)
+            if (await _repository.GetUserByUsernameAsync(userDto.Login) is not null)
                 return ResponseResult<User>.Failure("Такой пользователь уже существует");
-            else if (await _repository.GetUserByEmailAsync(userDto.Email) is not null)
+            if (await _repository.GetUserByEmailAsync(userDto.Email) is not null)
                 return ResponseResult<User>.Failure("Пользователь с такой почтой уже существует");
 
             var user = AuthUserMapper.Map(userDto);

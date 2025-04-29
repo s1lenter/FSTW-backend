@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace FSTW_backend.Models
 {
@@ -10,9 +11,13 @@ namespace FSTW_backend.Models
         public string PasswordHash { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        [JsonIgnore]
         public List<Favorite> Favorites { get; set; }
+        [JsonIgnore]
         public Profile Profile { get; set; }
+        [JsonIgnore]
         public List<Resume> Resumes { get; set; }
+        [JsonIgnore]
         public RefreshToken RefreshToken { get; set; }
     }
 }
