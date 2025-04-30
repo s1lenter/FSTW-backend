@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FSTW_backend.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/personal_cabinet")]
     public class PersonalCabinetController : ControllerBase
     {
@@ -17,7 +18,6 @@ namespace FSTW_backend.Controllers
             _service = service;
         }
 
-        [Authorize]
         [HttpGet("all_info")]
         public async Task<IActionResult> GetAllInfo()
         {
@@ -26,7 +26,6 @@ namespace FSTW_backend.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpPost("send_info")]
         public async Task<IActionResult> CreatePersonalInfo([FromForm] PersonalCabinetDto personalCabinetDto)
         {

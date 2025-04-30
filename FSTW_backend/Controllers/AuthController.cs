@@ -38,6 +38,7 @@ namespace FSTW_backend.Controllers
 
         }
 
+        [Authorize]
         [HttpPost("/logout")]
         public async Task<IActionResult> Logout()
         {
