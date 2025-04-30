@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FSTW_backend.Mapping;
 using Microsoft.OpenApi.Models;
 
 namespace FSTW_backend
@@ -35,6 +36,8 @@ namespace FSTW_backend
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddAutoMapper(typeof(AppMapperProfile));
 
             //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             var connectionString = builder.Configuration.GetConnectionString("LocalConnection");

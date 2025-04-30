@@ -5,6 +5,8 @@ namespace FSTW_backend.Repositories
 {
     public interface IPersonalCabinetRepository
     {
-        public Task<Profile> GetAllInfo(int userId);
+        public Task<Profile> GetAllInfoAsync(int userId);
+
+        public Task<Profile> CreatePersonalCabinetInfo(int userId, PersonalCabinetDto personalCabinetDto);
     }
 }

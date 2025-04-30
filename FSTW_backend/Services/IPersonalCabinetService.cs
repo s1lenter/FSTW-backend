@@ -5,6 +5,8 @@ namespace FSTW_backend.Services
 {
     public interface IPersonalCabinetService
     {
-        public Task<Profile> GetAllInfo(int userId);
+        public Task<PersonalCabinetDto> GetAllInfo(int userId);
+
+        public Task<Profile> CreatePersonalInfo(int userId, PersonalCabinetDto personalCabinetDto);
     }
 }

@@ -35,5 +35,23 @@ namespace FSTW_backend.Mapping
             }
             return dto;
         }
+
+        public static TEntity MapProfileReverse<TDto, TEntity>(TDto dto)
+            where TEntity : new()
+        {
+            var entity = new TEntity();
+            var dtoProps = entity.GetType().GetProperties();
+            var entityProps = dto.GetType().GetProperties();
+
+            foreach (var prop in dtoProps)
+            {
+                var entityProp = entityProps.FirstOrDefault(p => p.Name == prop.Name &&
+                                                                 p.PropertyType == prop.PropertyType);
+                if (entityProp is not null)
+                    prop.SetValue(entity, entityProp.GetValue(dto));
+
+            }
+            return entity;
+        }
     }
 }

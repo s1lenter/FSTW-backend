@@ -2,7 +2,7 @@
 {
     public class PersonalCabinetDto
     {
-        public byte[] Avatar { get; set; }
+        //public byte[] Avatar { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }

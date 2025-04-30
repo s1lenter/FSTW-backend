@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FSTW_backend.Models
 {
@@ -13,7 +14,8 @@ namespace FSTW_backend.Models
         public string Course { get; set; } = "Не указано";
         public string Skills { get; set; } = "Не указано";
         public DateTime DateOfBirth { get; set; } = DateTime.UtcNow;
-        public byte[] Avatar { get; set; } = new byte[0];
+        
+        //public byte[] Avatar { get; set; } = new byte[0];
 
         public string PhoneNumber { get; set; } = "Не указано";
         public string SocialNet { get; set; } = "Не указано";

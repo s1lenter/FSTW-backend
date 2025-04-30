@@ -21,10 +21,24 @@ namespace FSTW_backend.Controllers
         [HttpGet("all_info")]
         public async Task<IActionResult> GetAllInfo()
         {
-            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
+            var userId = GetUserId();
             var response = await _service.GetAllInfo(int.Parse(userId));
-            var x = AuthUserMapper.MapProfile<Profile, PersonalCabinetDto>(response);
-            return Ok(x);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost("send_info")]
+        public async Task<IActionResult> CreatePersonalInfo([FromForm] PersonalCabinetDto personalCabinetDto)
+        {
+            var userId = GetUserId();
+            await _service.CreatePersonalInfo(int.Parse(userId), personalCabinetDto);
+            return Ok();
+        }
+
+        private string GetUserId()
+        {
+            return HttpContext.User.Claims.FirstOrDefault(c => 
+                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
         }
     }
 }
