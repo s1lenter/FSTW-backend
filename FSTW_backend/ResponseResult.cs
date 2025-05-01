@@ -4,13 +4,13 @@
     {
         public bool Successed { get; }
         public T Value { get; }
-        public string? Error { get; set; }
+        public List<Dictionary<string, string>> Errors { get; set; }
 
-        public ResponseResult(bool successed, T value, string error)
+        public ResponseResult(bool successed, T value, List<Dictionary<string, string>> error)
         {
             Successed = successed;
             Value = value;
-            Error = error;
+            Errors = error;
         }
 
         public static ResponseResult<T> Success(T value)
@@ -18,7 +18,7 @@
             return new ResponseResult<T>(true, value, null);
         }
 
-        public static ResponseResult<T> Failure(string error)
+        public static ResponseResult<T> Failure(List<Dictionary<string, string>> error)
         {
             return new ResponseResult<T>(false, default, error);
         }

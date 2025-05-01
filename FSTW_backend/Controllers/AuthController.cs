@@ -25,7 +25,7 @@ namespace FSTW_backend.Controllers
             var response = await _authService.RegisterAsync(userAuthDto);
             if (response.Successed)
                 return Ok();
-            return BadRequest(response.Error);
+            return BadRequest(response.Errors);
         }
 
         [HttpPost("/login")]
@@ -34,7 +34,7 @@ namespace FSTW_backend.Controllers
             var response = await _authService.LoginAsync(userLoginDto, HttpContext);
             if (response.Successed)
                 return Ok(response.Value);
-            return BadRequest(response.Error);
+            return BadRequest(response.Errors);
 
         }
 
@@ -58,7 +58,7 @@ namespace FSTW_backend.Controllers
                 HttpContext.Request.Headers.Authorization.ToString().Split()[1], HttpContext);
             if (response.Successed)
                 return Ok(response.Value);
-            return BadRequest(response.Error);
+            return BadRequest(response.Errors);
         }
 
         [Authorize]
@@ -77,6 +77,12 @@ namespace FSTW_backend.Controllers
                 new { Name = "bbbbb" }
             };
             return Ok(user);
+        }
+
+        [HttpPost("/all_post")]
+        public IActionResult EndpointPost([FromForm] UserRegisterRequestDto text)
+        {
+            return Ok(text);
         }
     }
 }

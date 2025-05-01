@@ -20,7 +20,7 @@ namespace FSTW_backend
                 options.AddPolicy("CorsPolicy",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5001", "http://localhost:3000", "http://localhost")
+                        policy.WithOrigins("http://localhost")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
@@ -39,8 +39,8 @@ namespace FSTW_backend
 
             builder.Services.AddAutoMapper(typeof(AppMapperProfile));
 
-            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            //var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
             builder.Services.AddScoped<IAuthService, AuthService>();
