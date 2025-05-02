@@ -3,7 +3,6 @@
     public class Resume
     {
         public int Id { get; set; }
-        public string Goal { get; set; } = "Не указано";
         public string Hobbies { get; set; } = "Не указано";
         public string About { get; set; } = "Не указано";
 

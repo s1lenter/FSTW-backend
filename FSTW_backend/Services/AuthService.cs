@@ -12,20 +12,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using System.Reflection.Metadata.Ecma335;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace FSTW_backend.Services
 {
     public class AuthService : IAuthService
     {
+        private IMapper _mapper;
         IAuthRepository _repository;
         IConfiguration _configuration;
         IAuthTokenService _tokenService;
-        public AuthService(AppDbContext appDbContext, IConfiguration configuration, IAuthTokenService tokenService)
+        public AuthService(AppDbContext appDbContext, IConfiguration configuration, IAuthTokenService tokenService, IMapper mapper)
         {
             _repository = new AuthRepository(appDbContext);
             _configuration = configuration;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
 
         public async Task<ResponseResult<User>> RegisterAsync(UserRegisterRequestDto userDto)
@@ -47,7 +50,8 @@ namespace FSTW_backend.Services
                 return ResponseResult<User>.Failure(errorRes);
             }
 
-            var user = AuthUserMapper.Map(userDto);
+            var user = new User();
+            _mapper.Map(userDto, user);
             await _repository.CreateUserAsync(user);
             return ResponseResult<User>.Success(user);
         }

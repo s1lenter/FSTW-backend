@@ -48,12 +48,14 @@ namespace FSTW_backend.Controllers
             return BadRequest("Error!");
         }
 
-        [Authorize]
         [HttpPost("/refresh")]
         public async Task<IActionResult> RefreshAccessToken([FromBody] string refreshToken)
         {
+            var userClaims = HttpContext.User.Claims.ToList();
+            if (userClaims.Count == 0)
+                return Unauthorized();
 
-            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
+            var userId = userClaims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
             var response = await _authService.RefreshAccessTokenAsync(refreshToken, int.Parse(userId),
                 HttpContext.Request.Headers.Authorization.ToString().Split()[1], HttpContext);
             if (response.Successed)

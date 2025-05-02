@@ -39,8 +39,8 @@ namespace FSTW_backend
 
             builder.Services.AddAutoMapper(typeof(AppMapperProfile));
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            //var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
             builder.Services.AddScoped<IAuthService, AuthService>();

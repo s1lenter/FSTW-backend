@@ -25,7 +25,9 @@ namespace FSTW_backend.Services
         {
             var profile = await _repository.GetAllInfoAsync(userId);
 
-            return AuthUserMapper.MapProfile<Profile, PersonalCabinetDto>(profile);
+            var pcDto = new PersonalCabinetDto();
+            _mapper.Map(profile, pcDto);
+            return pcDto;
         }
     }
 }

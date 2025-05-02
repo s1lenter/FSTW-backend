@@ -23,13 +23,11 @@ namespace FSTW_backend.Controllers
             return Ok();
         }
 
-        [HttpPut("goal")]
-        public async Task<IActionResult> ChangeGoals([FromBody] string goalsText)
-        {
-            var userId = GetUserId();
-            _service.ChangeGoals(int.Parse(userId), goalsText);
-            return Ok();
-        }
+        //[HttpPost("education")]
+        //public async Task<IActionResult> AddEducationInfo()
+        //{
+
+        //}
 
         private string GetUserId()
         {

@@ -25,9 +25,9 @@ namespace FSTW_backend.Repositories
 
         public async Task ChangeGoals(int userId, string goalsText)
         {
-            var profile = await GetUserProfileAsync(userId);
-            var resume = await GetResume(profile.Id);
-            resume.Goal = goalsText;
+            //var profile = await GetUserProfileAsync(userId);
+            //var resume = await GetResume(profile.Id);
+            //resume.Goal = goalsText;
             await _context.SaveChangesAsync();
         }
 
