@@ -1,4 +1,5 @@
 ﻿
+using FSTW_backend.Dto;
 using FSTW_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,11 +24,12 @@ namespace FSTW_backend.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task ChangeGoals(int userId, string goalsText)
+        public async Task SendAboutInfo(int userId, AboutDto aboutDto)
         {
-            //var profile = await GetUserProfileAsync(userId);
-            //var resume = await GetResume(profile.Id);
-            //resume.Goal = goalsText;
+            var profile = await GetUserProfileAsync(userId);
+            var resume = await GetResume(profile.Id);
+            resume.About = aboutDto.About;
+            resume.Hobbies = aboutDto.Hobbies;
             await _context.SaveChangesAsync();
         }
 

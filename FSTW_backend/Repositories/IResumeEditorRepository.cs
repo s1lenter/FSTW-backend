@@ -1,4 +1,5 @@
-﻿using FSTW_backend.Models;
+﻿using FSTW_backend.Dto;
+using FSTW_backend.Models;
 
 namespace FSTW_backend.Repositories
 {
@@ -6,6 +7,6 @@ namespace FSTW_backend.Repositories
     {
         public Task CreateEmptyResume(int userId);
 
-        public Task ChangeGoals(int userId, string goalsText);
+        public Task SendAboutInfo(int userId, AboutDto aboutDto);
     }
 }

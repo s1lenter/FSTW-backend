@@ -1,4 +1,5 @@
-﻿using FSTW_backend.Services;
+﻿using FSTW_backend.Dto;
+using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,13 @@ namespace FSTW_backend.Controllers
         //{
 
         //}
+
+        [HttpPost("about_and_hobbies")]
+        public async Task<IActionResult> SendAboutInfo([FromBody] AboutDto aboutDto)
+        {
+            await _service.SendAboutInfo(int.Parse(GetUserId()), aboutDto);
+            return Ok();
+        }
 
         private string GetUserId()
         {

@@ -1,9 +1,11 @@
-﻿namespace FSTW_backend.Services
+﻿using FSTW_backend.Dto;
+
+namespace FSTW_backend.Services
 {
     public interface IResumeEditorService
     {
         public Task CreateEmptyResume(int userId);
 
-        public Task ChangeGoals(int userId, string goalsText);
+        public Task SendAboutInfo(int userId, AboutDto aboutDto);
     }
 }

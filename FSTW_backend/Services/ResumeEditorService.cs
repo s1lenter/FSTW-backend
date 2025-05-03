@@ -1,4 +1,5 @@
 ﻿
+using FSTW_backend.Dto;
 using FSTW_backend.Repositories;
 
 namespace FSTW_backend.Services
@@ -11,9 +12,9 @@ namespace FSTW_backend.Services
             _repository = new ResumeEditorRepository(appDbContext);
         }
 
-        public async Task ChangeGoals(int userId, string goalsText)
+        public async Task SendAboutInfo(int userId, AboutDto aboutDto)
         {
-            await _repository.ChangeGoals(userId, goalsText);
+            await _repository.SendAboutInfo(userId, aboutDto);
         }
 
         public async Task CreateEmptyResume(int userId)
