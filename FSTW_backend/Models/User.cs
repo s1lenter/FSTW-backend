@@ -9,7 +9,8 @@ namespace FSTW_backend.Models
         public string Login { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public string Role { get; set; } = "User";
 
         [JsonIgnore]
         public List<Favorite> Favorites { get; set; }

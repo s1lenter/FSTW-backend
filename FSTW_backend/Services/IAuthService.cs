@@ -12,6 +12,6 @@ namespace FSTW_backend.Services
 
         public Task<ResponseResult<string>> LogoutAsync(HttpContext context);
 
-        public Task<ResponseResult<string>> RefreshAccessTokenAsync(string refreshToken, int userId, string accessToken, HttpContext httpContext);
+        public Task<ResponseResult<string>> RefreshAccessTokenAsync(string accessToken, HttpContext httpContext);
     }
 }

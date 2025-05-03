@@ -49,14 +49,9 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("/refresh")]
-        public async Task<IActionResult> RefreshAccessToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshAccessToken()
         {
-            var userClaims = HttpContext.User.Claims.ToList();
-            if (userClaims.Count == 0)
-                return Unauthorized();
-
-            var userId = userClaims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
-            var response = await _authService.RefreshAccessTokenAsync(refreshToken, int.Parse(userId),
+            var response = await _authService.RefreshAccessTokenAsync(
                 HttpContext.Request.Headers.Authorization.ToString().Split()[1], HttpContext);
             if (response.Successed)
                 return Ok(response.Value);
@@ -70,21 +65,28 @@ namespace FSTW_backend.Controllers
             return Ok("You authorized!");
         }
 
-        [HttpGet("/all")]
-        public IActionResult Endpoint()
+        [Authorize(Roles = "Admin")]
+        [HttpGet("/secret_for_admin")]
+        public IActionResult OnlyAdminEndpoint()
         {
-            var user = new[]
-            {
-                new { Name = "aaaa" },
-                new { Name = "bbbbb" }
-            };
-            return Ok(user);
+            return Ok("You authorized!");
         }
 
-        [HttpPost("/all_post")]
-        public IActionResult EndpointPost([FromForm] UserRegisterRequestDto text)
-        {
-            return Ok(text);
-        }
+        //[HttpGet("/all")]
+        //public IActionResult Endpoint()
+        //{
+        //    var user = new[]
+        //    {
+        //        new { Name = "aaaa" },
+        //        new { Name = "bbbbb" }
+        //    };
+        //    return Ok(user);
+        //}
+
+        //[HttpPost("/all_post")]
+        //public IActionResult EndpointPost([FromForm] UserRegisterRequestDto text)
+        //{
+        //    return Ok(text);
+        //}
     }
 }

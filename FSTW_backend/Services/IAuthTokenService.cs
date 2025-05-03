@@ -10,7 +10,7 @@ namespace FSTW_backend.Services
 
         public Task<string> GenearateAndSaveRefreshTokenAsync(User user);
 
-        public ClaimsPrincipal GetClaimsFromToken(string token);
+        public Task<ClaimsPrincipal> GetClaimsFromToken(string token);
 
         public Task<string> RefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequestDto, User user);
 

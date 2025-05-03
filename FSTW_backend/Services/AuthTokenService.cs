@@ -42,6 +42,7 @@ namespace FSTW_backend.Services
             {
                 new Claim(ClaimTypes.Name, user.Login),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role)
             };
             return CreateAccessToken(claims);
         }
@@ -68,7 +69,7 @@ namespace FSTW_backend.Services
             return CreateAccessToken(claims.ToList());
         }
 
-        public ClaimsPrincipal GetClaimsFromToken(string token)
+        public async Task<ClaimsPrincipal> GetClaimsFromToken(string token)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("AppSettings:TokenKey")));
             TokenValidationParameters tokenParams = new TokenValidationParameters()
@@ -82,7 +83,10 @@ namespace FSTW_backend.Services
                 ValidateLifetime = false
             };
             var tokenHandler = new JwtSecurityTokenHandler();
-            var principal = tokenHandler.ValidateToken(token, tokenParams, out SecurityToken securityToken);
+            var result = await tokenHandler.ValidateTokenAsync(token, tokenParams);
+            var principal = new ClaimsPrincipal(result.ClaimsIdentity);
+            //var principal = tokenHandler.ValidateToken(token, tokenParams, out SecurityToken securityToken);
+            var securityToken = result.SecurityToken;
             var jwtSecurityToken = securityToken as JwtSecurityToken;
 
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))

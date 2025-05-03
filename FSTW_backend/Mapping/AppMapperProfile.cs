@@ -10,9 +10,7 @@ namespace FSTW_backend.Mapping
         {
             CreateMap<PersonalCabinetDto, Profile>().ReverseMap();
             CreateMap<UserRegisterRequestDto, User>().ForMember(dest => dest.PasswordHash,
-                opt => opt.MapFrom(src => HashPassword(src.Password)))
-                .ForMember(dest => dest.CreatedDate, 
-                    opt => opt.MapFrom(src => DateTime.Now));
+                opt => opt.MapFrom(src => HashPassword(src.Password)));
         }
 
         private string HashPassword(string password)

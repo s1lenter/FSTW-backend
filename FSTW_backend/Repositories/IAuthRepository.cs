@@ -18,6 +18,8 @@ namespace FSTW_backend.Repositories
 
         public Task<RefreshToken> GetRefreshTokenAsync(string token);
 
+        public Task<RefreshToken> GetRefreshTokenAsync(int userId);
+
         public Task<User?> GetUserByUsernameAsync(string userName);
 
         public Task<User?> GetUserByEmailAsync(string email);

@@ -76,6 +76,11 @@ namespace FSTW_backend.Repositories
             return await _dbContext.RefreshToken.FirstOrDefaultAsync(t => t.Token == token);
         }
 
+        public async Task<RefreshToken?> GetRefreshTokenAsync(int userId)
+        {
+            return await _dbContext.RefreshToken.FirstOrDefaultAsync(t => t.UserId == userId);
+        }
+
         public async Task DeleteRefreshTokenAsync(int userId)
         {
             var token = await _dbContext.RefreshToken.FirstOrDefaultAsync(t => t.UserId == userId);

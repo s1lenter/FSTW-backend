@@ -100,21 +100,23 @@ namespace FSTW_backend.Services
             return ResponseResult<string>.Success("");
         }
 
-        public async Task<ResponseResult<string>> RefreshAccessTokenAsync(string refreshToken, int userId, string accessToken, HttpContext httpContext)
+        public async Task<ResponseResult<string>> RefreshAccessTokenAsync(string accessToken, HttpContext httpContext)
         {
             var errorRes = new List<Dictionary<string, string>>();
 
-            var principal = _tokenService.GetClaimsFromToken(accessToken);
-            var savedRefreshToken = await _repository.GetRefreshTokenAsync(refreshToken);
+            var principal = await _tokenService.GetClaimsFromToken(accessToken);
+            var userId = principal.Claims.FirstOrDefault(c =>
+                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
+            var savedRefreshToken = await _repository.GetRefreshTokenAsync(int.Parse(userId));
 
             if (savedRefreshToken is null)
             {
-                errorRes.Add(new() { ["LoginError"] = "Неверный refresh токен" });
+                errorRes.Add(new() { ["LoginError"] = "Пользователь не имеет refresh токен" });
                 return ResponseResult<string>.Failure(errorRes);
             }
             if (savedRefreshToken.RefreshTokenExpiryTime < DateTime.UtcNow)
             {
-                errorRes.Add(new() { ["LoginError"] = "Истек срок дейтсвия refresh токена" });
+                errorRes.Add(new() { ["LoginError"] = "Истек срок действия refresh токена" });
                 return ResponseResult<string>.Failure(errorRes);
             }
 
