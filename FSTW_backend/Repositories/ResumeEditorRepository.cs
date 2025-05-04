@@ -38,9 +38,29 @@ namespace FSTW_backend.Repositories
             return ResponseResult<int>.Success(resume.Id);
         }
 
-        public Task<ResponseResult<int>> SendProjects(int userId, int resumeId, List<ProjectDto> projectDto)
+        public async Task<ResponseResult<int>> SendProjects(int userId, int resumeId, List<ProjectDto> projectDtos)
         {
-            throw new NotImplementedException();
+            var resume = await GetResume(resumeId, userId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            foreach (var projectDto in projectDtos)
+            {
+                var project = new Project()
+                {
+                    Description = projectDto.Description,
+                    Link = projectDto.Link,
+                    Title = projectDto.Title,
+                    Resume = resume,
+                    ResumeId = resumeId
+                };
+                await _context.Project.AddAsync(project);
+            }
+
+            await _context.SaveChangesAsync();
+            return ResponseResult<int>.Success(resumeId);
         }
 
         public async Task<ResponseResult<int>> SendExperience(int userId, int resumeId, ExperienceDto experienceDto)
@@ -52,6 +72,67 @@ namespace FSTW_backend.Repositories
                     new () {["ResumeError"] = "Резюме с таким Id не существует"}
                 });
             resume.Experience = experienceDto.Info;
+            await _context.SaveChangesAsync();
+            return ResponseResult<int>.Success(resume.Id);
+        }
+
+        public async Task<ResponseResult<int>> SendAchievements(int userId, int resumeId, List<AchievementDto> achievementDtos)
+        {
+            var resume = await GetResume(resumeId, userId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            foreach (var achievementDto in achievementDtos)
+            {
+                var achievement = new Achievement()
+                {
+                    Description = achievementDto.Info,
+                    Resume = resume,
+                    ResumeId = resumeId
+                };
+                await _context.Achievement.AddAsync(achievement);
+            }
+            await _context.SaveChangesAsync();
+            return ResponseResult<int>.Success(resumeId);
+        }
+
+        public async Task<ResponseResult<int>> SendEducation(int userId, int resumeId, List<EducationDto> educationDtos)
+        {
+            var resume = await GetResume(resumeId, userId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            foreach (var educationDto in educationDtos)
+            {
+                var education = new Education()
+                {
+                    Level = educationDto.Level,
+                    Place = educationDto.Place,
+                    Specialization = educationDto.Specialization,
+                    StartYear = educationDto.StartYear,
+                    EndYear = educationDto.EndYear,
+                    Resume = resume,
+                    ResumeId = resumeId
+                };
+                await _context.AddAsync(education);
+            }
+            await _context.SaveChangesAsync();
+            return ResponseResult<int>.Success(resumeId);
+        }
+
+        public async Task<ResponseResult<int>> SendSkills(int userId, int resumeId, string skills)
+        {
+            var resume = await GetResume(resumeId, userId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            resume.Skills = skills;
             await _context.SaveChangesAsync();
             return ResponseResult<int>.Success(resume.Id);
         }

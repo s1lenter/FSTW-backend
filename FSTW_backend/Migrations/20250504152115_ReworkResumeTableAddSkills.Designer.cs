@@ -3,6 +3,7 @@ using System;
 using FSTW_backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FSTW_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250504152115_ReworkResumeTableAddSkills")]
+    partial class ReworkResumeTableAddSkills
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,25 +82,14 @@ namespace FSTW_backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EndYear")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Place")
+                    b.Property<string>("Institute")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("ResumeId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Specialization")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("StartYear")
+                    b.Property<int>("YearOfGraduation")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

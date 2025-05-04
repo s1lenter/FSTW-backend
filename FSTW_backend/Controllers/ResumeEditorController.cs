@@ -1,4 +1,5 @@
 ﻿using FSTW_backend.Dto.ResumeDto;
+using FSTW_backend.Models;
 using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,15 +43,47 @@ namespace FSTW_backend.Controllers
         [HttpPost("experience/{resumeId}")]
         public async Task<IActionResult> SendExperience([FromRoute] int resumeId, [FromBody] ExperienceDto experienceDto)
         {
-            await _service.SendExperienceInfo(int.Parse(GetUserId()), resumeId, experienceDto);
-            return Ok();
+            var response = await _service.SendExperienceInfo(int.Parse(GetUserId()), resumeId, experienceDto);
+            if (response.Successed)
+                return Ok();
+            return BadRequest(response.Errors);
         }
 
-        //[HttpPost("projects")]
-        //public async Task<IActionResult> SendProjects([FromBody] List<ProjectDto> projectDto)
-        //{
+        [HttpPost("projects/{resumeId}")]
+        public async Task<IActionResult> SendProjects([FromRoute] int resumeId,[FromBody] List<ProjectDto> projectDtos)
+        {
+            var response = await _service.SendProjects(int.Parse(GetUserId()), resumeId, projectDtos);
+            if (response.Successed)
+                return Ok();
+            return BadRequest(response.Errors);
+        }
 
-        //}
+        [HttpPost("achievements/{resumeId}")]
+        public async Task<IActionResult> SendAchievements([FromRoute] int resumeId, [FromBody] List<AchievementDto> achievementDtos)
+        {
+            var response = await _service.SendAchievements(int.Parse(GetUserId()), resumeId, achievementDtos);
+            if (response.Successed)
+                return Ok();
+            return BadRequest(response.Errors);
+        }
+
+        [HttpPost("skills/{resumeId}")]
+        public async Task<IActionResult> SendEducation([FromRoute] int resumeId, [FromBody] string skills)
+        {
+            var response = await _service.SendSkills(int.Parse(GetUserId()), resumeId, skills);
+            if (response.Successed)
+                return Ok();
+            return BadRequest(response.Errors);
+        }
+
+        [HttpPost("education/{resumeId}")]
+        public async Task<IActionResult> SendEducation([FromRoute] int resumeId, [FromBody] List<EducationDto> educationDtos)
+        {
+            var response = await _service.SendEducation(int.Parse(GetUserId()), resumeId, educationDtos);
+            if (response.Successed)
+                return Ok();
+            return BadRequest(response.Errors);
+        }
 
         private string GetUserId()
         {
