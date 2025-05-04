@@ -1,5 +1,4 @@
-﻿
-using FSTW_backend.Dto;
+﻿using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +11,7 @@ namespace FSTW_backend.Repositories
         {
             _context = appDbContext;
         }
-        public async Task CreateEmptyResume(int userId)
+        public async Task<int> CreateEmptyResume(int userId)
         {
             var profile = await GetUserProfileAsync(userId);
             var resume = new Resume()
@@ -22,20 +21,44 @@ namespace FSTW_backend.Repositories
             };
             await _context.Resume.AddAsync(resume);
             await _context.SaveChangesAsync();
+            return resume.Id;
         }
 
-        public async Task SendAboutInfo(int userId, AboutDto aboutDto)
+        public async Task<ResponseResult<int>> SendAboutInfo(int userId, int resumeId, AboutDto aboutDto)
         {
-            var profile = await GetUserProfileAsync(userId);
-            var resume = await GetResume(profile.Id);
+            var resume = await GetResume(resumeId, userId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
             resume.About = aboutDto.About;
             resume.Hobbies = aboutDto.Hobbies;
             await _context.SaveChangesAsync();
+            return ResponseResult<int>.Success(resume.Id);
         }
 
-        private async Task<Resume> GetResume(int profileId)
+        public Task<ResponseResult<int>> SendProjects(int userId, int resumeId, List<ProjectDto> projectDto)
         {
-            return await _context.Resume.FirstOrDefaultAsync(r => r.ProfileId == profileId);
+            throw new NotImplementedException();
+        }
+
+        public async Task<ResponseResult<int>> SendExperience(int userId, int resumeId, ExperienceDto experienceDto)
+        {
+            var resume = await GetResume(resumeId, userId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            resume.Experience = experienceDto.Info;
+            await _context.SaveChangesAsync();
+            return ResponseResult<int>.Success(resume.Id);
+        }
+
+        private async Task<Resume> GetResume(int resumeId, int userId)
+        {
+            return await _context.Resume.FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
         }
 
         private async Task<User> GetUserAsync(int userId)

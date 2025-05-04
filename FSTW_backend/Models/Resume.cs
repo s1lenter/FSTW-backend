@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Hobbies { get; set; } = "Не указано";
         public string About { get; set; } = "Не указано";
+        public string Experience { get; set; } = "Не указано";
 
         public int UserId { get; set; }
         public User User { get; set; }

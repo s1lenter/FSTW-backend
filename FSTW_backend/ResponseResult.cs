@@ -18,9 +18,9 @@
             return new ResponseResult<T>(true, value, null);
         }
 
-        public static ResponseResult<T> Failure(List<Dictionary<string, string>> error)
+        public static ResponseResult<T> Failure(List<Dictionary<string, string>> errors)
         {
-            return new ResponseResult<T>(false, default, error);
+            return new ResponseResult<T>(false, default, errors);
         }
     }
 }

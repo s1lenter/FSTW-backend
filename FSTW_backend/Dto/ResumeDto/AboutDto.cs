@@ -1,4 +1,4 @@
-﻿namespace FSTW_backend.Dto
+﻿namespace FSTW_backend.Dto.ResumeDto
 {
     public class AboutDto
     {

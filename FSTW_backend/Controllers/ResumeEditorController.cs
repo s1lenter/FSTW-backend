@@ -1,4 +1,4 @@
-﻿using FSTW_backend.Dto;
+﻿using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +20,8 @@ namespace FSTW_backend.Controllers
         public async Task<IActionResult> CreateEmptyResume()
         {
             var userId = GetUserId();
-            await _service.CreateEmptyResume(int.Parse(userId));
-            return Ok();
+            var resumeId = await _service.CreateEmptyResume(int.Parse(userId));
+            return Ok(resumeId);
         }
 
         //[HttpPost("education")]
@@ -30,12 +30,27 @@ namespace FSTW_backend.Controllers
 
         //}
 
-        [HttpPost("about_and_hobbies")]
-        public async Task<IActionResult> SendAboutInfo([FromBody] AboutDto aboutDto)
+        [HttpPost("about_and_hobbies/{resumeId}")]
+        public async Task<IActionResult> SendAboutInfo([FromRoute] int resumeId, [FromBody] AboutDto aboutDto)
         {
-            await _service.SendAboutInfo(int.Parse(GetUserId()), aboutDto);
+            var response = await _service.SendAboutInfo(int.Parse(GetUserId()), resumeId, aboutDto);
+            if (response.Successed)
+                return Ok();
+            return BadRequest(response.Errors);
+        }
+
+        [HttpPost("experience/{resumeId}")]
+        public async Task<IActionResult> SendExperience([FromRoute] int resumeId, [FromBody] ExperienceDto experienceDto)
+        {
+            await _service.SendExperienceInfo(int.Parse(GetUserId()), resumeId, experienceDto);
             return Ok();
         }
+
+        //[HttpPost("projects")]
+        //public async Task<IActionResult> SendProjects([FromBody] List<ProjectDto> projectDto)
+        //{
+
+        //}
 
         private string GetUserId()
         {
