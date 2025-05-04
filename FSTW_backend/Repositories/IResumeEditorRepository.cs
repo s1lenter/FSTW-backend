@@ -7,16 +7,18 @@ namespace FSTW_backend.Repositories
     {
         public Task<int> CreateEmptyResume(int userId);
 
-        public Task<ResponseResult<int>> SendAboutInfo(int userId, int resumeId, AboutDto aboutDto);
+        public Task<ResponseResult<int>> SendAboutInfo(Resume resume, AboutDto aboutDto);
 
-        public Task<ResponseResult<int>> SendProjects(int userId, int resumeId, List<ProjectDto> projectDtos);
+        public Task<ResponseResult<int>> SendProjects(Resume resume, List<Project> projects);
 
-        public Task<ResponseResult<int>> SendExperience(int userId, int resumeId, ExperienceDto experienceDto);
+        public Task<ResponseResult<int>> SendExperience(Resume resume, string experience);
 
-        public Task<ResponseResult<int>> SendAchievements(int userId, int resumeId, List<AchievementDto> achievementDtos);
+        public Task<ResponseResult<int>> SendAchievements(Resume resume, List<Achievement> achievements);
 
-        public Task<ResponseResult<int>> SendEducation(int userId, int resumeId, List<EducationDto> educationDtos);
+        public Task<ResponseResult<int>> SendEducation(Resume resume, List<Education> educations);
 
-        public Task<ResponseResult<int>> SendSkills(int userId, int resumeId, string skills);
+        public Task<ResponseResult<int>> SendSkills(Resume resume, string skills);
+
+        public Task<Resume> GetCurrentResume(int userId, int resumeId);
     }
 }

@@ -8,7 +8,7 @@ namespace FSTW_backend.Services
 
         public Task<ResponseResult<int>> SendAboutInfo(int userId, int resumeId, AboutDto aboutDto);
 
-        public Task<ResponseResult<int>> SendExperienceInfo(int userId, int resumeId, ExperienceDto experienceDto);
+        public Task<ResponseResult<int>> SendExperienceInfo(int userId, int resumeId, string experience);
 
         public Task<ResponseResult<int>> SendProjects(int userId, int resumeId, List<ProjectDto> projectDtos);
 

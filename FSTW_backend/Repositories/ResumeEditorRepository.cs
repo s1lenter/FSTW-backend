@@ -24,120 +24,55 @@ namespace FSTW_backend.Repositories
             return resume.Id;
         }
 
-        public async Task<ResponseResult<int>> SendAboutInfo(int userId, int resumeId, AboutDto aboutDto)
+        public async Task<ResponseResult<int>> SendAboutInfo(Resume resume, AboutDto aboutDto)
         {
-            var resume = await GetResume(resumeId, userId);
-            if (resume is null)
-                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
-                {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
-                });
             resume.About = aboutDto.About;
             resume.Hobbies = aboutDto.Hobbies;
             await _context.SaveChangesAsync();
             return ResponseResult<int>.Success(resume.Id);
         }
 
-        public async Task<ResponseResult<int>> SendProjects(int userId, int resumeId, List<ProjectDto> projectDtos)
+        public async Task<ResponseResult<int>> SendProjects(Resume resume, List<Project> projects)
         {
-            var resume = await GetResume(resumeId, userId);
-            if (resume is null)
-                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
-                {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
-                });
-            foreach (var projectDto in projectDtos)
-            {
-                var project = new Project()
-                {
-                    Description = projectDto.Description,
-                    Link = projectDto.Link,
-                    Title = projectDto.Title,
-                    Resume = resume,
-                    ResumeId = resumeId
-                };
-                await _context.Project.AddAsync(project);
-            }
-
-            await _context.SaveChangesAsync();
-            return ResponseResult<int>.Success(resumeId);
-        }
-
-        public async Task<ResponseResult<int>> SendExperience(int userId, int resumeId, ExperienceDto experienceDto)
-        {
-            var resume = await GetResume(resumeId, userId);
-            if (resume is null)
-                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
-                {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
-                });
-            resume.Experience = experienceDto.Info;
+            await _context.Project.AddRangeAsync(projects);
             await _context.SaveChangesAsync();
             return ResponseResult<int>.Success(resume.Id);
         }
 
-        public async Task<ResponseResult<int>> SendAchievements(int userId, int resumeId, List<AchievementDto> achievementDtos)
+        public async Task<ResponseResult<int>> SendExperience(Resume resume, string experience)
         {
-            var resume = await GetResume(resumeId, userId);
-            if (resume is null)
-                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
-                {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
-                });
-            foreach (var achievementDto in achievementDtos)
-            {
-                var achievement = new Achievement()
-                {
-                    Description = achievementDto.Info,
-                    Resume = resume,
-                    ResumeId = resumeId
-                };
-                await _context.Achievement.AddAsync(achievement);
-            }
+            resume.Experience = experience;
             await _context.SaveChangesAsync();
-            return ResponseResult<int>.Success(resumeId);
+            return ResponseResult<int>.Success(resume.Id);
         }
 
-        public async Task<ResponseResult<int>> SendEducation(int userId, int resumeId, List<EducationDto> educationDtos)
+        public async Task<ResponseResult<int>> SendAchievements(Resume resume, List<Achievement> achievements)
         {
-            var resume = await GetResume(resumeId, userId);
-            if (resume is null)
-                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
-                {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
-                });
-            foreach (var educationDto in educationDtos)
-            {
-                var education = new Education()
-                {
-                    Level = educationDto.Level,
-                    Place = educationDto.Place,
-                    Specialization = educationDto.Specialization,
-                    StartYear = educationDto.StartYear,
-                    EndYear = educationDto.EndYear,
-                    Resume = resume,
-                    ResumeId = resumeId
-                };
-                await _context.AddAsync(education);
-            }
+            await _context.AddRangeAsync(achievements);
             await _context.SaveChangesAsync();
-            return ResponseResult<int>.Success(resumeId);
+            return ResponseResult<int>.Success(resume.Id);
         }
 
-        public async Task<ResponseResult<int>> SendSkills(int userId, int resumeId, string skills)
+        public async Task<ResponseResult<int>> SendEducation(Resume resume, List<Education> educations)
         {
-            var resume = await GetResume(resumeId, userId);
-            if (resume is null)
-                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
-                {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
-                });
+            await _context.AddRangeAsync(educations);
+            await _context.SaveChangesAsync();
+            return ResponseResult<int>.Success(resume.Id);
+        }
+
+        public async Task<ResponseResult<int>> SendSkills(Resume resume, string skills)
+        {
             resume.Skills = skills;
             await _context.SaveChangesAsync();
             return ResponseResult<int>.Success(resume.Id);
         }
 
-        private async Task<Resume> GetResume(int resumeId, int userId)
+        public async Task<Resume> GetResume(int resumeId, int userId)
+        {
+            return await _context.Resume.FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
+        }
+
+        public async Task<Resume> GetCurrentResume(int userId, int resumeId)
         {
             return await _context.Resume.FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
         }

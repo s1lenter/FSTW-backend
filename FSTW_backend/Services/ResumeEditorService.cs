@@ -1,4 +1,6 @@
-﻿using FSTW_backend.Dto.ResumeDto;
+﻿using AutoMapper;
+using FSTW_backend.Dto.ResumeDto;
+using FSTW_backend.Models;
 using FSTW_backend.Repositories;
 
 namespace FSTW_backend.Services
@@ -6,39 +8,104 @@ namespace FSTW_backend.Services
     public class ResumeEditorService : IResumeEditorService
     {
         private IResumeEditorRepository _repository;
-        public ResumeEditorService(AppDbContext appDbContext)
+        private IMapper _mapper;
+        public ResumeEditorService(AppDbContext appDbContext, IMapper mapper)
         {
             _repository = new ResumeEditorRepository(appDbContext);
+            _mapper = mapper;
         }
 
         public async Task<ResponseResult<int>> SendAboutInfo(int userId, int resumeId, AboutDto aboutDto)
         {
-            return await _repository.SendAboutInfo(userId, resumeId, aboutDto);
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            return await _repository.SendAboutInfo(resume, aboutDto);
         }
 
-        public async Task<ResponseResult<int>> SendExperienceInfo(int userId, int resumeId, ExperienceDto experienceDto)
+        public async Task<ResponseResult<int>> SendExperienceInfo(int userId, int resumeId, string experience)
         {
-            return await _repository.SendExperience(userId, resumeId, experienceDto);
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            return await _repository.SendExperience(resume, experience);
         }
 
         public async Task<ResponseResult<int>> SendProjects(int userId, int resumeId, List<ProjectDto> projectDtos)
         {
-            return await _repository.SendProjects(userId, resumeId, projectDtos);
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            var projects = new List<Project>();
+            foreach (var projectDto in projectDtos)
+            {
+                var project = new Project();
+                _mapper.Map(projectDto, project);
+                project.ResumeId = resumeId;
+                project.Resume = resume;
+                projects.Add(project);
+            }
+            return await _repository.SendProjects(resume, projects);
         }
 
         public async Task<ResponseResult<int>> SendAchievements(int userId, int resumeId, List<AchievementDto> achievementDtos)
         {
-            return await _repository.SendAchievements(userId, resumeId, achievementDtos);
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            var achievements = new List<Achievement>();
+            foreach (var achievementDto in achievementDtos)
+            {
+                var achievement = new Achievement();
+                _mapper.Map(achievementDto, achievement);
+                achievement.ResumeId = resumeId;
+                achievement.Resume = resume;
+                achievements.Add(achievement);
+            }
+            return await _repository.SendAchievements(resume, achievements);
         }
 
         public async Task<ResponseResult<int>> SendEducation(int userId, int resumeId, List<EducationDto> educationDtos)
         {
-            return await _repository.SendEducation(userId, resumeId, educationDtos);
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            var educations = new List<Education>();
+            foreach (var educationDto in educationDtos)
+            {
+                var education = new Education();
+                _mapper.Map(educationDto, education);
+                education.ResumeId = resumeId;
+                education.Resume = resume;
+                educations.Add(education);
+            }
+            return await _repository.SendEducation(resume, educations);
         }
 
         public async Task<ResponseResult<int>> SendSkills(int userId, int resumeId, string skills)
         {
-            return await _repository.SendSkills(userId, resumeId, skills);
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            return await _repository.SendSkills(resume, skills);
         }
 
 

@@ -20,8 +20,7 @@ namespace FSTW_backend.Controllers
         [HttpPost("init")]
         public async Task<IActionResult> CreateEmptyResume()
         {
-            var userId = GetUserId();
-            var resumeId = await _service.CreateEmptyResume(int.Parse(userId));
+            var resumeId = await _service.CreateEmptyResume(GetUserId());
             return Ok(resumeId);
         }
 
@@ -34,16 +33,16 @@ namespace FSTW_backend.Controllers
         [HttpPost("about_and_hobbies/{resumeId}")]
         public async Task<IActionResult> SendAboutInfo([FromRoute] int resumeId, [FromBody] AboutDto aboutDto)
         {
-            var response = await _service.SendAboutInfo(int.Parse(GetUserId()), resumeId, aboutDto);
+            var response = await _service.SendAboutInfo(GetUserId(), resumeId, aboutDto);
             if (response.Successed)
                 return Ok();
             return BadRequest(response.Errors);
         }
 
         [HttpPost("experience/{resumeId}")]
-        public async Task<IActionResult> SendExperience([FromRoute] int resumeId, [FromBody] ExperienceDto experienceDto)
+        public async Task<IActionResult> SendExperience([FromRoute] int resumeId, [FromBody] string experience)
         {
-            var response = await _service.SendExperienceInfo(int.Parse(GetUserId()), resumeId, experienceDto);
+            var response = await _service.SendExperienceInfo(GetUserId(), resumeId, experience);
             if (response.Successed)
                 return Ok();
             return BadRequest(response.Errors);
@@ -52,7 +51,7 @@ namespace FSTW_backend.Controllers
         [HttpPost("projects/{resumeId}")]
         public async Task<IActionResult> SendProjects([FromRoute] int resumeId,[FromBody] List<ProjectDto> projectDtos)
         {
-            var response = await _service.SendProjects(int.Parse(GetUserId()), resumeId, projectDtos);
+            var response = await _service.SendProjects(GetUserId(), resumeId, projectDtos);
             if (response.Successed)
                 return Ok();
             return BadRequest(response.Errors);
@@ -61,7 +60,7 @@ namespace FSTW_backend.Controllers
         [HttpPost("achievements/{resumeId}")]
         public async Task<IActionResult> SendAchievements([FromRoute] int resumeId, [FromBody] List<AchievementDto> achievementDtos)
         {
-            var response = await _service.SendAchievements(int.Parse(GetUserId()), resumeId, achievementDtos);
+            var response = await _service.SendAchievements(GetUserId(), resumeId, achievementDtos);
             if (response.Successed)
                 return Ok();
             return BadRequest(response.Errors);
@@ -70,7 +69,7 @@ namespace FSTW_backend.Controllers
         [HttpPost("skills/{resumeId}")]
         public async Task<IActionResult> SendEducation([FromRoute] int resumeId, [FromBody] string skills)
         {
-            var response = await _service.SendSkills(int.Parse(GetUserId()), resumeId, skills);
+            var response = await _service.SendSkills(GetUserId(), resumeId, skills);
             if (response.Successed)
                 return Ok();
             return BadRequest(response.Errors);
@@ -79,16 +78,26 @@ namespace FSTW_backend.Controllers
         [HttpPost("education/{resumeId}")]
         public async Task<IActionResult> SendEducation([FromRoute] int resumeId, [FromBody] List<EducationDto> educationDtos)
         {
-            var response = await _service.SendEducation(int.Parse(GetUserId()), resumeId, educationDtos);
+            var response = await _service.SendEducation(GetUserId(), resumeId, educationDtos);
             if (response.Successed)
                 return Ok();
             return BadRequest(response.Errors);
         }
 
-        private string GetUserId()
+        [HttpGet("all_info/{resumeId}")]
+        public async Task<IActionResult> GetAllInfo([FromRoute] int resumeId)
         {
-            return HttpContext.User.Claims.FirstOrDefault(c =>
-                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value;
+            //var response = await _service
+            //if (response.Successed)
+            //    return Ok();
+            //return BadRequest(response.Errors);
+            return Ok();
+        }
+
+        private int GetUserId()
+        {
+            return int.Parse(HttpContext.User.Claims.FirstOrDefault(c =>
+                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value);
         }
     }
 }
