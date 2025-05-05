@@ -17,5 +17,7 @@ namespace FSTW_backend.Services
         public Task<ResponseResult<int>> SendEducation(int userId, int resumeId, List<EducationDto> educationDtos);
 
         public Task<ResponseResult<int>> SendSkills(int userId, int resumeId, string skills);
+
+        public Task<ResponseResult<AllResumeInfoDto>> GetAllResumeInfo(int userId, int resumeId);
     }
 }

@@ -2,6 +2,6 @@
 {
     public class AchievementDto
     {
-        public string Info { get; set; }
+        public string Description { get; set; }
     }
 }

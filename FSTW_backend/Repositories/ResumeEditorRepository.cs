@@ -67,19 +67,24 @@ namespace FSTW_backend.Repositories
             return ResponseResult<int>.Success(resume.Id);
         }
 
-        public async Task<Resume> GetResume(int resumeId, int userId)
-        {
-            return await _context.Resume.FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
-        }
-
         public async Task<Resume> GetCurrentResume(int userId, int resumeId)
         {
             return await _context.Resume.FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
         }
 
-        private async Task<User> GetUserAsync(int userId)
+        public List<Project> GetProjects(int resumeId)
         {
-            return await _context.User.FirstOrDefaultAsync(u => u.Id == userId);
+            return _context.Project.Where(p => p.ResumeId == resumeId).ToList();
+        }
+
+        public List<Education> GetEducations(int resumeId)
+        {
+            return _context.Education.Where(e => e.ResumeId == resumeId).ToList();
+        }
+
+        public List<Achievement> GetAchievements(int resumeId)
+        {
+            return _context.Achievement.Where(a => a.ResumeId == resumeId).ToList();
         }
 
         private async Task<Profile> GetUserProfileAsync(int userId)

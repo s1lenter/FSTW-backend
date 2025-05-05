@@ -108,6 +108,45 @@ namespace FSTW_backend.Services
             return await _repository.SendSkills(resume, skills);
         }
 
+        public async Task<ResponseResult<AllResumeInfoDto>> GetAllResumeInfo(int userId, int resumeId)
+        {
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<AllResumeInfoDto>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                });
+            var projects = _repository.GetProjects(resumeId);
+            var educations = _repository.GetEducations(resumeId);
+            var achievements = _repository.GetAchievements(resumeId);
+
+            var resumeInfo = new AllResumeInfoDto()
+            {
+                About = resume.About,
+                Hobbies = resume.Hobbies,
+                Experience = resume.Experience,
+                Skills = resume.Skills,
+                Projects = MapLists<Project, ProjectDto>(projects),
+                Educations = MapLists<Education, EducationDto>(educations),
+                Achievements = MapLists<Achievement ,AchievementDto>(achievements)
+            };
+            return ResponseResult<AllResumeInfoDto>.Success(resumeInfo);
+        }
+
+        private List<TResult> MapLists<TSource, TResult>(List<TSource> sourceList) 
+            where TResult : new()
+        {
+            var resultList = new List<TResult>();
+            foreach (var item in sourceList)
+            {
+                var result = new TResult();
+                _mapper.Map(item, result);
+                resultList.Add(result);
+            }
+
+            return resultList;
+        }
+
 
         public async Task<int> CreateEmptyResume(int userId)
         {

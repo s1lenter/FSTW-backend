@@ -87,11 +87,10 @@ namespace FSTW_backend.Controllers
         [HttpGet("all_info/{resumeId}")]
         public async Task<IActionResult> GetAllInfo([FromRoute] int resumeId)
         {
-            //var response = await _service
-            //if (response.Successed)
-            //    return Ok();
-            //return BadRequest(response.Errors);
-            return Ok();
+            var response = await _service.GetAllResumeInfo(GetUserId(), resumeId);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
         }
 
         private int GetUserId()

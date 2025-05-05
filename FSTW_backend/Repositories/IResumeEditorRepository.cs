@@ -19,6 +19,12 @@ namespace FSTW_backend.Repositories
 
         public Task<ResponseResult<int>> SendSkills(Resume resume, string skills);
 
+        public List<Project> GetProjects(int resumeId);
+
+        public List<Education> GetEducations(int resumeId);
+
+        public List<Achievement> GetAchievements(int resumeId);
+
         public Task<Resume> GetCurrentResume(int userId, int resumeId);
     }
 }
