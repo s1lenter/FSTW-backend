@@ -21,7 +21,7 @@ namespace FSTW_backend.Services
             if (resume is null)
                 return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
                 {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                    new () {["Error"] = "Резюме с таким Id не существует"}
                 });
             return await _repository.SendAboutInfo(resume, aboutDto);
         }
@@ -32,7 +32,7 @@ namespace FSTW_backend.Services
             if (resume is null)
                 return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
                 {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                    new () {["Error"] = "Резюме с таким Id не существует"}
                 });
             return await _repository.SendExperience(resume, experience);
         }
@@ -43,7 +43,7 @@ namespace FSTW_backend.Services
             if (resume is null)
                 return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
                 {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                    new () {["Error"] = "Резюме с таким Id не существует"}
                 });
             var projects = new List<Project>();
             foreach (var projectDto in projectDtos)
@@ -63,7 +63,7 @@ namespace FSTW_backend.Services
             if (resume is null)
                 return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
                 {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                    new () {["Error"] = "Резюме с таким Id не существует"}
                 });
             var achievements = new List<Achievement>();
             foreach (var achievementDto in achievementDtos)
@@ -83,7 +83,7 @@ namespace FSTW_backend.Services
             if (resume is null)
                 return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
                 {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                    new () {["Error"] = "Резюме с таким Id не существует"}
                 });
             var educations = new List<Education>();
             foreach (var educationDto in educationDtos)
@@ -103,7 +103,7 @@ namespace FSTW_backend.Services
             if (resume is null)
                 return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
                 {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                    new () {["Error"] = "Резюме с таким Id не существует"}
                 });
             return await _repository.SendSkills(resume, skills);
         }
@@ -114,7 +114,7 @@ namespace FSTW_backend.Services
             if (resume is null)
                 return ResponseResult<AllResumeInfoDto>.Failure(new List<Dictionary<string, string>>()
                 {
-                    new () {["ResumeError"] = "Резюме с таким Id не существует"}
+                    new () {["Error"] = "Резюме с таким Id не существует"}
                 });
             var projects = _repository.GetProjects(resumeId);
             var educations = _repository.GetEducations(resumeId);

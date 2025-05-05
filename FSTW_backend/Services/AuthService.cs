@@ -36,17 +36,17 @@ namespace FSTW_backend.Services
             var errorRes = new List<Dictionary<string, string>>();
             if (userDto.Password != userDto.PasswordRepeat)
             {
-                errorRes.Add(new (){["PasswordMatch"] = "Пароли не совпадают"});
+                errorRes.Add(new (){["Error"] = "Пароли не совпадают"});
                 return ResponseResult<User>.Failure(errorRes);
             }
             if (await _repository.GetUserByUsernameAsync(userDto.Login) is not null)
             {
-                errorRes.Add(new() { ["LoginError"] = "Такой пользователь уже существует" });
+                errorRes.Add(new() { ["Error"] = "Такой пользователь уже существует" });
                 return ResponseResult<User>.Failure(errorRes);
             }
             if (await _repository.GetUserByEmailAsync(userDto.Email) is not null)
             {
-                errorRes.Add(new() { ["EmailError"] = "Пользователь с такой почтой уже существует" });
+                errorRes.Add(new() { ["Error"] = "Пользователь с такой почтой уже существует" });
                 return ResponseResult<User>.Failure(errorRes);
             }
 
@@ -63,7 +63,7 @@ namespace FSTW_backend.Services
             var user = await _repository.GetUserAync(userLoginDto);
             if (user is null)
             {
-                errorRes.Add(new() { ["LoginError"] = "Такой пользователь уже существует" });
+                errorRes.Add(new() { ["Error"] = "Такого пользователя не существует" });
                 return ResponseResult<TokenResponseDto?>.Failure(errorRes);
             }
 
@@ -79,7 +79,7 @@ namespace FSTW_backend.Services
                     RefreshToken = refreshToken
                 });
             }
-            errorRes.Add(new() { ["PasswordError"] = "Неверный пароль" });
+            errorRes.Add(new() { ["Error"] = "Неверный пароль" });
             return ResponseResult<TokenResponseDto?>.Failure(errorRes);
         }
 
@@ -111,12 +111,12 @@ namespace FSTW_backend.Services
 
             if (savedRefreshToken is null)
             {
-                errorRes.Add(new() { ["LoginError"] = "Пользователь не имеет refresh токен" });
+                errorRes.Add(new() { ["Error"] = "Пользователь не имеет refresh токен" });
                 return ResponseResult<string>.Failure(errorRes);
             }
             if (savedRefreshToken.RefreshTokenExpiryTime < DateTime.UtcNow)
             {
-                errorRes.Add(new() { ["LoginError"] = "Истек срок действия refresh токена" });
+                errorRes.Add(new() { ["Error"] = "Истек срок действия refresh токена" });
                 return ResponseResult<string>.Failure(errorRes);
             }
 

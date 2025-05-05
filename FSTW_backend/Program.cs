@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FSTW_backend.Mapping;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FSTW_backend
 {
@@ -33,7 +34,23 @@ namespace FSTW_backend
                     });
             });
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState
+                        .Where(e => e.Value.Errors.Count > 0).FirstOrDefault();
+
+                    var result = new List<Dictionary<string, string>>();
+
+                    result.Add(new Dictionary<string, string>()
+                    {
+                        { "Error", errors.Value.Errors[0].ErrorMessage }
+                    });
+
+                    return new BadRequestObjectResult(result);
+                };
+            }); ;
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
 
