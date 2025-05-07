@@ -1,4 +1,5 @@
 ﻿using FSTW_backend.Dto;
+using FSTW_backend.Dto.AuthDto;
 using FSTW_backend.Filters;
 using FSTW_backend.Models;
 using FSTW_backend.Services;

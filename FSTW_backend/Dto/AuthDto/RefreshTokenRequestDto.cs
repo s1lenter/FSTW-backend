@@ -1,4 +1,4 @@
-﻿namespace FSTW_backend.Dto
+﻿namespace FSTW_backend.Dto.AuthDto
 {
     public class RefreshTokenRequestDto
     {

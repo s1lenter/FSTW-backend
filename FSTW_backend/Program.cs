@@ -67,6 +67,8 @@ namespace FSTW_backend
 
             builder.Services.AddScoped<IResumeEditorService, ResumeEditorService>();
 
+            builder.Services.AddScoped<IAdminService, AdminService>();
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

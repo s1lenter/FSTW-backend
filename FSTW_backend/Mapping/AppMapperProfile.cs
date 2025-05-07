@@ -1,4 +1,5 @@
 ﻿using FSTW_backend.Dto;
+using FSTW_backend.Dto.AuthDto;
 using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Models;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +16,7 @@ namespace FSTW_backend.Mapping
             CreateMap<EducationDto, Education>().ReverseMap();
             CreateMap<ProjectDto, Project>().ReverseMap();
             CreateMap<AchievementDto, Achievement>().ReverseMap();
+            CreateMap<InternshipDto, Internship>().ReverseMap();
         }
 
         private string HashPassword(string password)

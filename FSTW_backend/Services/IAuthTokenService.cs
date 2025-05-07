@@ -1,4 +1,4 @@
-﻿using FSTW_backend.Dto;
+﻿using FSTW_backend.Dto.AuthDto;
 using FSTW_backend.Models;
 using System.Security.Claims;
 

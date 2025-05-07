@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace FSTW_backend.Dto
+namespace FSTW_backend.Dto.AuthDto
 {
     public class UserRegisterRequestDto
     {

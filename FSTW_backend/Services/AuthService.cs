@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using System.Reflection.Metadata.Ecma335;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using FSTW_backend.Dto.AuthDto;
 
 namespace FSTW_backend.Services
 {
