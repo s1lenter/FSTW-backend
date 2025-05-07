@@ -1,4 +1,5 @@
-﻿using FSTW_backend.Dto.ResumeDto;
+﻿using FSTW_backend.Dto;
+using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Models;
 
 namespace FSTW_backend.Repositories
@@ -26,5 +27,11 @@ namespace FSTW_backend.Repositories
         public List<Achievement> GetAchievements(int resumeId);
 
         public Task<Resume> GetCurrentResume(int userId, int resumeId);
+
+        public Task<Profile> GetUserProfileAsync(int userId);
+
+        public Task<User> GetUserAsync(int userId);
+
+        public Task DeleteResume(Resume resume);
     }
 }

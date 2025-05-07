@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using FSTW_backend.Dto;
 using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Models;
 using FSTW_backend.Repositories;
+using Profile = FSTW_backend.Models.Profile;
 
 namespace FSTW_backend.Services
 {
@@ -120,17 +122,39 @@ namespace FSTW_backend.Services
             var educations = _repository.GetEducations(resumeId);
             var achievements = _repository.GetAchievements(resumeId);
 
-            var resumeInfo = new AllResumeInfoDto()
-            {
-                About = resume.About,
-                Hobbies = resume.Hobbies,
-                Experience = resume.Experience,
-                Skills = resume.Skills,
-                Projects = MapLists<Project, ProjectDto>(projects),
-                Educations = MapLists<Education, EducationDto>(educations),
-                Achievements = MapLists<Achievement ,AchievementDto>(achievements)
-            };
-            return ResponseResult<AllResumeInfoDto>.Success(resumeInfo);
+            var profile = await _repository.GetUserProfileAsync(userId);
+            var user = await _repository.GetUserAsync(userId);
+
+
+            return ResponseResult<AllResumeInfoDto>.Success(CreateResumeInfo(user, resume, profile, projects, achievements, educations));
+        }
+
+        public async Task<ResponseResult<AllResumeInfoDto>> GetAllResumeInfoForPdf(int userId, int resumeId)
+        {
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<AllResumeInfoDto>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Резюме с таким Id не существует"}
+                });
+            var user = await _repository.GetUserAsync(userId);
+            var profile = await _repository.GetUserProfileAsync(userId);
+            var projects = _repository.GetProjects(resumeId);
+            var educations = _repository.GetEducations(resumeId);
+            var achievements = _repository.GetAchievements(resumeId);
+            return ResponseResult<AllResumeInfoDto>.Success(CreateResumeInfo(user, resume, profile, projects, achievements, educations));
+        }
+
+        public async Task<ResponseResult<int>> DeleteResume(int userId, int resumeId)
+        {
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Резюме с таким Id не существует"}
+                });
+            await _repository.DeleteResume(resume);
+            return ResponseResult<int>.Success(resumeId);
         }
 
         private List<TResult> MapLists<TSource, TResult>(List<TSource> sourceList) 
@@ -145,6 +169,33 @@ namespace FSTW_backend.Services
             }
 
             return resultList;
+        }
+
+        public AllResumeInfoDto CreateResumeInfo(User user, Resume resume, Profile profile, List<Project> projects,
+            List<Achievement> achievements, List<Education> educations)
+        {
+            var resumeInfo = new AllResumeInfoDto()
+            {
+                FirstName = profile.FirstName,
+                LastName = profile.LastName,
+                MiddleName = profile.MiddleName,
+                Gender = profile.Gender,
+                DateOfBirth = profile.DateOfBirth,
+                PhoneNumber = profile.PhoneNumber,
+                Vk = profile.Vk,
+                Telegram = profile.Telegram,
+                GitHub = profile.GitHub,
+                Linkedin = profile.Linkedin,
+                Email = user.Email,
+                Hobbies = resume.Hobbies,
+                About = resume.About,
+                Experience = resume.Experience,
+                Skills = resume.Skills,
+                Projects = MapLists<Project, ProjectDto>(projects),
+                Educations = MapLists<Education, EducationDto>(educations),
+                Achievements = MapLists<Achievement, AchievementDto>(achievements)
+            };
+            return resumeInfo;
         }
 
 

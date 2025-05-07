@@ -50,7 +50,7 @@ namespace FSTW_backend
 
                     return new BadRequestObjectResult(result);
                 };
-            }); ;
+            });
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
 

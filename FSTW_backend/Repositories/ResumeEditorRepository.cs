@@ -1,4 +1,5 @@
-﻿using FSTW_backend.Dto.ResumeDto;
+﻿using FSTW_backend.Dto;
+using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -72,6 +73,12 @@ namespace FSTW_backend.Repositories
             return await _context.Resume.FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId);
         }
 
+        public async Task DeleteResume(Resume resume)
+        {
+            _context.Resume.Remove(resume);
+            await _context.SaveChangesAsync();
+        }
+
         public List<Project> GetProjects(int resumeId)
         {
             return _context.Project.Where(p => p.ResumeId == resumeId).ToList();
@@ -87,9 +94,14 @@ namespace FSTW_backend.Repositories
             return _context.Achievement.Where(a => a.ResumeId == resumeId).ToList();
         }
 
-        private async Task<Profile> GetUserProfileAsync(int userId)
+        public async Task<Profile> GetUserProfileAsync(int userId)
         {
             return await _context.Profile.FirstOrDefaultAsync(p => p.UserId == userId);
+        }
+
+        public async Task<User> GetUserAsync(int userId)
+        {
+            return await _context.User.FirstOrDefaultAsync(u => u.Id == userId);
         }
     }
 }

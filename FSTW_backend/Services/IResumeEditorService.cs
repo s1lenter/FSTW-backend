@@ -1,4 +1,6 @@
-﻿using FSTW_backend.Dto.ResumeDto;
+﻿using FSTW_backend.Dto;
+using FSTW_backend.Dto.ResumeDto;
+using FSTW_backend.Models;
 
 namespace FSTW_backend.Services
 {
@@ -19,5 +21,9 @@ namespace FSTW_backend.Services
         public Task<ResponseResult<int>> SendSkills(int userId, int resumeId, string skills);
 
         public Task<ResponseResult<AllResumeInfoDto>> GetAllResumeInfo(int userId, int resumeId);
+
+        public Task<ResponseResult<AllResumeInfoDto>> GetAllResumeInfoForPdf(int userId, int resumeId);
+
+        public Task<ResponseResult<int>> DeleteResume(int userId, int resumeId);
     }
 }

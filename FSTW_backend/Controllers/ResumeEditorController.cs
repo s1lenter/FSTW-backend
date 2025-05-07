@@ -3,6 +3,9 @@ using FSTW_backend.Models;
 using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using FSTW_backend.Dto;
+using FSTW_backend.Pdf;
 
 namespace FSTW_backend.Controllers
 {
@@ -93,10 +96,27 @@ namespace FSTW_backend.Controllers
             return BadRequest(response.Errors);
         }
 
+        [HttpDelete("remove/{resumeId}")]
+        public async Task<IActionResult> DeleteResume([FromRoute] int resumeId)
+        {
+            var response = await _service.DeleteResume(GetUserId(), resumeId);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
+        }
+
         private int GetUserId()
         {
             return int.Parse(HttpContext.User.Claims.FirstOrDefault(c =>
                 c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value);
+        }
+
+        [HttpGet("downland/{resumeId}")]
+        public async Task<IActionResult> DownlandFile([FromRoute] int resumeId)
+        {
+            var resumeInfoResponse = await _service.GetAllResumeInfo(GetUserId(), resumeId);
+            byte[] pdfBytes = PdfCreator.CreatePdf(resumeInfoResponse.Value);
+            return File(pdfBytes, "application/pdf", "resume.pdf");
         }
     }
 }
