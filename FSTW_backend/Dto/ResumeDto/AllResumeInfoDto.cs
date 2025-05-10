@@ -15,8 +15,8 @@ namespace FSTW_backend.Dto.ResumeDto
         public string GitHub { get; set; }
         public string Linkedin { get; set; }
         public string Email { get; set; }
-        public string Hobbies { get; set; }
 
+        public string Hobbies { get; set; }
         public string About { get; set; }
 
         public string Experience { get; set; }

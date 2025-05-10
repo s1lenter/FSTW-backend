@@ -79,10 +79,22 @@ namespace FSTW_backend.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task ChangeOnceResumeInfo(Resume resume, ChangeResumeInfoDto changeResumeInfoDto)
+        {
+            resume.About = changeResumeInfoDto.About;
+            resume.Hobbies = changeResumeInfoDto.Hobbies;
+            resume.Experience = changeResumeInfoDto.Experience;
+            resume.Skills = changeResumeInfoDto.Skills;
+
+            _context.SaveChangesAsync();
+        }
+
         public List<Project> GetProjects(int resumeId)
         {
             return _context.Project.Where(p => p.ResumeId == resumeId).ToList();
         }
+
+
 
         public List<Education> GetEducations(int resumeId)
         {
@@ -92,6 +104,24 @@ namespace FSTW_backend.Repositories
         public List<Achievement> GetAchievements(int resumeId)
         {
             return _context.Achievement.Where(a => a.ResumeId == resumeId).ToList();
+        }
+
+        public async Task RemoveProjects(List<Project> projects)
+        {
+            _context.Project.RemoveRange(projects);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveAchievements(List<Achievement> achievements)
+        {
+            _context.Achievement.RemoveRange(achievements);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveEducations(List<Education> educations)
+        {
+            _context.Education.RemoveRange(educations);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Profile> GetUserProfileAsync(int userId)

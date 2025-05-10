@@ -27,12 +27,6 @@ namespace FSTW_backend.Controllers
             return Ok(resumeId);
         }
 
-        //[HttpPost("education")]
-        //public async Task<IActionResult> AddEducationInfo()
-        //{
-
-        //}
-
         [HttpPost("about_and_hobbies/{resumeId}")]
         public async Task<IActionResult> SendAboutInfo([FromRoute] int resumeId, [FromBody] AboutDto aboutDto)
         {
@@ -117,6 +111,15 @@ namespace FSTW_backend.Controllers
             var resumeInfoResponse = await _service.GetAllResumeInfo(GetUserId(), resumeId);
             byte[] pdfBytes = PdfCreator.CreatePdf(resumeInfoResponse.Value);
             return File(pdfBytes, "application/pdf", "resume.pdf");
+        }
+
+        [HttpPost("change_resume/{resumeId}")]
+        public async Task<IActionResult> ChangeResumeInfo([FromBody] ChangeResumeInfoDto changeResumeInfoDto, [FromRoute] int resumeId)
+        {
+            var response = await _service.ChangeResumeInfo(GetUserId(), resumeId, changeResumeInfoDto);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
         }
     }
 }

@@ -26,6 +26,12 @@ namespace FSTW_backend.Repositories
 
         public List<Achievement> GetAchievements(int resumeId);
 
+        public Task RemoveProjects(List<Project> projects);
+
+        public Task RemoveAchievements(List<Achievement> achievements);
+
+        public Task RemoveEducations(List<Education> educations);
+
         public Task<Resume> GetCurrentResume(int userId, int resumeId);
 
         public Task<Profile> GetUserProfileAsync(int userId);
@@ -33,5 +39,7 @@ namespace FSTW_backend.Repositories
         public Task<User> GetUserAsync(int userId);
 
         public Task DeleteResume(Resume resume);
+
+        public Task ChangeOnceResumeInfo(Resume resume, ChangeResumeInfoDto changeResumeInfoDto);
     }
 }

@@ -47,15 +47,12 @@ namespace FSTW_backend.Services
                 {
                     new () {["Error"] = "Резюме с таким Id не существует"}
                 });
-            var projects = new List<Project>();
-            foreach (var projectDto in projectDtos)
-            {
-                var project = new Project();
-                _mapper.Map(projectDto, project);
-                project.ResumeId = resumeId;
-                project.Resume = resume;
-                projects.Add(project);
-            }
+
+            var projectsExist = _repository.GetProjects(resumeId);
+            if (projectsExist.Count != 0)
+                await _repository.RemoveProjects(projectsExist);
+
+            var projects = ConvertProjects(resumeId, projectDtos, resume);
             return await _repository.SendProjects(resume, projects);
         }
 
@@ -67,15 +64,12 @@ namespace FSTW_backend.Services
                 {
                     new () {["Error"] = "Резюме с таким Id не существует"}
                 });
-            var achievements = new List<Achievement>();
-            foreach (var achievementDto in achievementDtos)
-            {
-                var achievement = new Achievement();
-                _mapper.Map(achievementDto, achievement);
-                achievement.ResumeId = resumeId;
-                achievement.Resume = resume;
-                achievements.Add(achievement);
-            }
+
+            var achievementsExist = _repository.GetAchievements(resumeId);
+            if (achievementsExist.Count != 0)
+                await _repository.RemoveAchievements(achievementsExist);
+
+            var achievements = ConvertAchievements(resumeId, achievementDtos, resume);
             return await _repository.SendAchievements(resume, achievements);
         }
 
@@ -87,6 +81,46 @@ namespace FSTW_backend.Services
                 {
                     new () {["Error"] = "Резюме с таким Id не существует"}
                 });
+
+            var educationsExist = _repository.GetEducations(resumeId);
+            if (educationsExist.Count != 0)
+                await _repository.RemoveEducations(educationsExist);
+
+            var educations = ConvertEducations(resumeId, educationDtos, resume);
+            return await _repository.SendEducation(resume, educations);
+        }
+
+        private List<Project> ConvertProjects(int resumeId, List<ProjectDto> projectDtos, Resume resume)
+        {
+            var projects = new List<Project>();
+            foreach (var projectDto in projectDtos)
+            {
+                var project = new Project();
+                _mapper.Map(projectDto, project);
+                project.ResumeId = resumeId;
+                project.Resume = resume;
+                projects.Add(project);
+            }
+
+            return projects;
+        }
+        private List<Achievement> ConvertAchievements(int resumeId, List<AchievementDto> achievementDtos, Resume resume)
+        {
+            var achievements = new List<Achievement>();
+            foreach (var achievementDto in achievementDtos)
+            {
+                var achievement = new Achievement();
+                _mapper.Map(achievementDto, achievement);
+                achievement.ResumeId = resumeId;
+                achievement.Resume = resume;
+                achievements.Add(achievement);
+            }
+
+            return achievements;
+        }
+
+        private List<Education> ConvertEducations(int resumeId, List<EducationDto> educationDtos, Resume resume)
+        {
             var educations = new List<Education>();
             foreach (var educationDto in educationDtos)
             {
@@ -96,7 +130,8 @@ namespace FSTW_backend.Services
                 education.Resume = resume;
                 educations.Add(education);
             }
-            return await _repository.SendEducation(resume, educations);
+
+            return educations;
         }
 
         public async Task<ResponseResult<int>> SendSkills(int userId, int resumeId, string skills)
@@ -129,22 +164,6 @@ namespace FSTW_backend.Services
             return ResponseResult<AllResumeInfoDto>.Success(CreateResumeInfo(user, resume, profile, projects, achievements, educations));
         }
 
-        public async Task<ResponseResult<AllResumeInfoDto>> GetAllResumeInfoForPdf(int userId, int resumeId)
-        {
-            var resume = await _repository.GetCurrentResume(userId, resumeId);
-            if (resume is null)
-                return ResponseResult<AllResumeInfoDto>.Failure(new List<Dictionary<string, string>>()
-                {
-                    new () {["Error"] = "Резюме с таким Id не существует"}
-                });
-            var user = await _repository.GetUserAsync(userId);
-            var profile = await _repository.GetUserProfileAsync(userId);
-            var projects = _repository.GetProjects(resumeId);
-            var educations = _repository.GetEducations(resumeId);
-            var achievements = _repository.GetAchievements(resumeId);
-            return ResponseResult<AllResumeInfoDto>.Success(CreateResumeInfo(user, resume, profile, projects, achievements, educations));
-        }
-
         public async Task<ResponseResult<int>> DeleteResume(int userId, int resumeId)
         {
             var resume = await _repository.GetCurrentResume(userId, resumeId);
@@ -154,6 +173,35 @@ namespace FSTW_backend.Services
                     new () {["Error"] = "Резюме с таким Id не существует"}
                 });
             await _repository.DeleteResume(resume);
+            return ResponseResult<int>.Success(resumeId);
+        }
+
+        public async Task<ResponseResult<int>> ChangeResumeInfo(int userId, int resumeId, ChangeResumeInfoDto changeResumeInfoDto)
+        {
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Резюме с таким Id не существует"}
+                });
+            await _repository.ChangeOnceResumeInfo(resume, changeResumeInfoDto);
+
+            var projectsExist = _repository.GetProjects(resumeId);
+            if (projectsExist.Count != 0)
+                await _repository.RemoveProjects(projectsExist);
+
+            var achievementsExist = _repository.GetAchievements(resumeId);
+            if (achievementsExist.Count != 0)
+                await _repository.RemoveAchievements(achievementsExist);
+
+            var educationsExist = _repository.GetEducations(resumeId);
+            if (educationsExist.Count != 0)
+                await _repository.RemoveEducations(educationsExist);
+
+            await _repository.SendProjects(resume, ConvertProjects(resumeId, changeResumeInfoDto.Projects, resume));
+            await _repository.SendAchievements(resume, ConvertAchievements(resumeId, changeResumeInfoDto.Achievements, resume));
+            await _repository.SendEducation(resume, ConvertEducations(resumeId, changeResumeInfoDto.Educations, resume));
+
             return ResponseResult<int>.Success(resumeId);
         }
 

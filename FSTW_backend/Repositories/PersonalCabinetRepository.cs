@@ -21,6 +21,7 @@ namespace FSTW_backend.Repositories
             var profile = await GetAllInfoAsync(userId);
             _mapper.Map(personalCabinetDto, profile);
 
+            profile.DateOfBirth = profile.DateOfBirth.ToUniversalTime();
             await _dbContext.SaveChangesAsync();
             return profile;
         }
