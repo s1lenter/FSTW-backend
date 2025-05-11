@@ -26,5 +26,10 @@ namespace FSTW_backend.Repositories
         {
             return await _context.Internship.ToListAsync();
         }
+
+        public async Task SaveChangesAsync(int internshipId)
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

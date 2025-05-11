@@ -40,10 +40,7 @@ namespace FSTW_backend.Services
         {
             var internships = await _repository.GetAllInternships();
             if (internships.Count == 0)
-                ResponseResult<List<InternshipDto>>.Failure(new List<Dictionary<string, string>>()
-                {
-                    new () {["Error"] = "Нет ни одной стажировки"}
-                });
+                ResponseResult<List<InternshipDto>>.Success(new List<InternshipDto>());
             var dtosList = new List<InternshipDto>();
             foreach (var internship in internships)
             {
@@ -52,6 +49,21 @@ namespace FSTW_backend.Services
                 dtosList.Add(dto);
             }
             return ResponseResult<List<InternshipDto>>.Success(dtosList);
+        }
+
+        public async Task<ResponseResult<int>> EditInternship(int internshipId, InternshipDto internshipDto)
+        {
+            var internship = await _repository.GetInternship(internshipId);
+
+            if (internship is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Стажировки с таким Id не существует"}
+                });
+
+            _mapper.Map(internshipDto, internship);
+            await _repository.SaveChangesAsync(internshipId);
+            return ResponseResult<int>.Success(internshipId);
         }
     }
 }

@@ -42,5 +42,14 @@ namespace FSTW_backend.Controllers
                 return Ok(response.Value);
             return BadRequest(response.Errors);
         }
+
+        [HttpPost("edit_internship/{internshipId}")]
+        public async Task<IActionResult> EditInternship([FromRoute] int internshipId, [FromBody] InternshipDto internshipDto)
+        {
+            var response = await _service.EditInternship(internshipId, internshipDto);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
+        }
     }
 }
