@@ -20,6 +20,7 @@ namespace FSTW_backend.Controllers
             _authService = authService;
         }
 
+        [Unauthorized]
         [HttpPost("/register")]
         public async Task<IActionResult> Register([FromForm] UserRegisterRequestDto userAuthDto)
         {
@@ -29,6 +30,7 @@ namespace FSTW_backend.Controllers
             return BadRequest(response.Errors);
         }
 
+        [Unauthorized]
         [HttpPost("/login")]
         public async Task<IActionResult> LoginAsync([FromForm] UserLoginDto userLoginDto)
         {

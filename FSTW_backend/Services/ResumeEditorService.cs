@@ -17,6 +17,21 @@ namespace FSTW_backend.Services
             _mapper = mapper;
         }
 
+        public ResponseResult<List<PersonalCabinetResumeDto>> GetAllUserResumes(int userId)
+        {
+            var resumes = _repository.GetAllUserResumes(userId);
+
+            var result = new List<PersonalCabinetResumeDto>();
+            foreach (var resume in resumes)
+            {
+                var pcResDto = new PersonalCabinetResumeDto();
+                pcResDto.Id = resume.Id;
+                pcResDto.Title = "Placeholder";
+                result.Add(pcResDto);
+            }
+            return ResponseResult<List<PersonalCabinetResumeDto>>.Success(result);
+        }
+
         public async Task<ResponseResult<int>> SendAboutInfo(int userId, int resumeId, AboutDto aboutDto)
         {
             var resume = await _repository.GetCurrentResume(userId, resumeId);

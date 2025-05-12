@@ -6,6 +6,8 @@ namespace FSTW_backend.Services
 {
     public interface IResumeEditorService
     {
+        public ResponseResult<List<PersonalCabinetResumeDto>> GetAllUserResumes(int userId);
+
         public Task<int> CreateEmptyResume(int userId);
 
         public Task<ResponseResult<int>> SendAboutInfo(int userId, int resumeId, AboutDto aboutDto);

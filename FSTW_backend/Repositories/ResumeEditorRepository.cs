@@ -12,6 +12,12 @@ namespace FSTW_backend.Repositories
         {
             _context = appDbContext;
         }
+
+        public List<Resume> GetAllUserResumes(int userId)
+        {
+            return _context.Resume.Where(r => r.UserId == userId).ToList();
+        }
+
         public async Task<int> CreateEmptyResume(int userId)
         {
             var profile = await GetUserProfileAsync(userId);

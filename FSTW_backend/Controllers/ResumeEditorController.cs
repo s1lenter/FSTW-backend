@@ -27,6 +27,15 @@ namespace FSTW_backend.Controllers
             return Ok(resumeId);
         }
 
+        [HttpGet("all_user_resumes")]
+        public async Task<IActionResult> GetAllResumes()
+        {
+            var userId = GetUserId();
+            var response = _service.GetAllUserResumes(userId);
+
+            return Ok(response.Value);
+        }
+
         [HttpPost("about_and_hobbies/{resumeId}")]
         public async Task<IActionResult> SendAboutInfo([FromRoute] int resumeId, [FromBody] AboutDto aboutDto)
         {

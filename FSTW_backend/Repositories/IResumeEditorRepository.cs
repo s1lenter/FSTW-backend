@@ -6,6 +6,8 @@ namespace FSTW_backend.Repositories
 {
     public interface IResumeEditorRepository
     {
+        public List<Resume> GetAllUserResumes(int userId);
+
         public Task<int> CreateEmptyResume(int userId);
 
         public Task<ResponseResult<int>> SendAboutInfo(Resume resume, AboutDto aboutDto);

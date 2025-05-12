@@ -3,6 +3,9 @@
     public class Resume
     {
         public int Id { get; set; }
+
+        //public string Title { get; set; }
+
         public string Hobbies { get; set; } = "Не указано";
         public string About { get; set; } = "Не указано";
         public string Experience { get; set; } = "Не указано";
