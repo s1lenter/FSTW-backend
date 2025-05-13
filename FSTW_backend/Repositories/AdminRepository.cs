@@ -28,9 +28,15 @@ namespace FSTW_backend.Repositories
             return internship;
         }
 
-        public async Task<List<Internship>> GetAllInternships()
+        public async Task<List<Internship>> GetAllInternships(string filterParam)
         {
-            return await _context.Internship.Where(i => !i.isArchive).ToListAsync();
+            if (filterParam == "archive")
+                return await _context.Internship.Where(i => i.isArchive).ToListAsync();
+            if (filterParam == "active")
+                return await _context.Internship.Where(i => !i.isArchive).ToListAsync();
+            if (filterParam == "all")
+                return await _context.Internship.ToListAsync();
+            return new List<Internship>();
         }
 
         public async Task SaveChangesAsync(int internshipId)

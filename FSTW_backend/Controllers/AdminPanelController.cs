@@ -35,9 +35,9 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpGet("all_internships")]
-        public async Task<IActionResult> GetInternship()
+        public async Task<IActionResult> GetInternship([FromQuery] string filterParam)
         {
-            var response = await _service.GetAllInternships();
+            var response = await _service.GetAllInternships(filterParam);
             if (response.Successed)
                 return Ok(response.Value);
             return BadRequest(response.Errors);

@@ -9,7 +9,7 @@ namespace FSTW_backend.Services
 
         public Task<ResponseResult<InternshipDto>> GetInternship(int internshipId);
 
-        public Task<ResponseResult<List<InternshipDto>>> GetAllInternships();
+        public Task<ResponseResult<List<InternshipDto>>> GetAllInternships(string filterParam);
 
         public Task<ResponseResult<int>> EditInternship(int internshipId, InternshipDto internshipDto);
 

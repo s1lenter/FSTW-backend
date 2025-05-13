@@ -36,9 +36,9 @@ namespace FSTW_backend.Services
             return ResponseResult<InternshipDto>.Success(internshipDto);
         }
 
-        public async Task<ResponseResult<List<InternshipDto>>> GetAllInternships()
+        public async Task<ResponseResult<List<InternshipDto>>> GetAllInternships(string filterParam)
         {
-            var internships = await _repository.GetAllInternships();
+            var internships = await _repository.GetAllInternships(filterParam);
             if (internships.Count == 0)
                 ResponseResult<List<InternshipDto>>.Success(new List<InternshipDto>());
             var dtosList = new List<InternshipDto>();
