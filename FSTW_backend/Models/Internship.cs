@@ -12,6 +12,8 @@
         public int SalaryTo { get; set; }
         public string Link { get; set; }
 
+        public bool isArchive { get; set; } = false;
+
         public List<Favorite> Favorite { get; set; }
         public Requirement Requirement { get; set; }
     }

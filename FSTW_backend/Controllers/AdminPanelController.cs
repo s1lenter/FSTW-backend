@@ -51,5 +51,32 @@ namespace FSTW_backend.Controllers
                 return Ok(response.Value);
             return BadRequest(response.Errors);
         }
+
+        [HttpDelete("internship/{internshipId}/remove")]
+        public async Task<IActionResult> DeleteInternship([FromRoute] int internshipId)
+        {
+            var response = await _service.DeleteInternship(internshipId);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
+        }
+
+        [HttpPut("internship/{internshipId}/archive")]
+        public async Task<IActionResult> ArchiveInternship([FromRoute] int internshipId)
+        {
+            var response = await _service.ArchiveInternship(internshipId);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
+        }
+
+        [HttpPut("internship/{internshipId}/unarchive")]
+        public async Task<IActionResult> UnarchiveInternship([FromRoute] int internshipId)
+        {
+            var response = await _service.UnarchiveInternship(internshipId);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
+        }
     }
 }

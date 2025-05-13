@@ -25,7 +25,7 @@ namespace FSTW_backend.Services
 
         public async Task<ResponseResult<InternshipDto>> GetInternship(int internshipId)
         {
-            var internship = await _repository.GetInternship(internshipId);
+            var internship = await _repository.GetUnarchiveInternship(internshipId);
             if (internship is null)
                 return ResponseResult<InternshipDto>.Failure(new List<Dictionary<string, string>>()
                 {
@@ -53,7 +53,7 @@ namespace FSTW_backend.Services
 
         public async Task<ResponseResult<int>> EditInternship(int internshipId, InternshipDto internshipDto)
         {
-            var internship = await _repository.GetInternship(internshipId);
+            var internship = await _repository.GetUnarchiveInternship(internshipId);
 
             if (internship is null)
                 return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
@@ -63,6 +63,48 @@ namespace FSTW_backend.Services
 
             _mapper.Map(internshipDto, internship);
             await _repository.SaveChangesAsync(internshipId);
+            return ResponseResult<int>.Success(internshipId);
+        }
+
+        public async Task<ResponseResult<int>> DeleteInternship(int internshipId)
+        {
+            var internship = await _repository.GetInternship(internshipId);
+
+            if (internship is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Стажировки с таким Id не существует"}
+                });
+
+            await _repository.DeleteInternship(internship);
+            return ResponseResult<int>.Success(internshipId);
+        }
+
+        public async Task<ResponseResult<int>> ArchiveInternship(int internshipId)
+        {
+            var internship = await _repository.GetUnarchiveInternship(internshipId);
+
+            if (internship is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Стажировки с таким Id не существует"}
+                });
+
+            await _repository.ArchiveInternship(internship);
+            return ResponseResult<int>.Success(internshipId);
+        }
+
+        public async Task<ResponseResult<int>> UnarchiveInternship(int internshipId)
+        {
+            var internship = await _repository.GetInternship(internshipId);
+
+            if (internship is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Стажировки с таким Id не существует"}
+                });
+
+            await _repository.UnarchiveInternship(internship);
             return ResponseResult<int>.Success(internshipId);
         }
     }

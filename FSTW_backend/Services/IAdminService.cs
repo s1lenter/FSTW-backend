@@ -12,5 +12,11 @@ namespace FSTW_backend.Services
         public Task<ResponseResult<List<InternshipDto>>> GetAllInternships();
 
         public Task<ResponseResult<int>> EditInternship(int internshipId, InternshipDto internshipDto);
+
+        public Task<ResponseResult<int>> DeleteInternship(int internshipId);
+
+        public Task<ResponseResult<int>> ArchiveInternship(int internshipId);
+
+        public Task<ResponseResult<int>> UnarchiveInternship(int internshipId);
     }
 }
