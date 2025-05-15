@@ -69,6 +69,8 @@ namespace FSTW_backend
 
             builder.Services.AddScoped<IAdminService, AdminService>();
 
+            builder.Services.AddScoped<INeuronetService, NeuronetService>();
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
