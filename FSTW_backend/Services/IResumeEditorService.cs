@@ -24,8 +24,10 @@ namespace FSTW_backend.Services
 
         public Task<ResponseResult<AllResumeInfoDto>> GetAllResumeInfo(int userId, int resumeId);
 
+        public Task<ResponseResult<OnlyResumeInfoDto>> GetOnlyResumeInfo(int userId, int resumeId);
+
         public Task<ResponseResult<int>> DeleteResume(int userId, int resumeId);
 
-        public Task<ResponseResult<int>> ChangeResumeInfo(int userId, int resumeId, ChangeResumeInfoDto changeResumeInfoDto);
+        public Task<ResponseResult<int>> ChangeResumeInfo(int userId, int resumeId, OnlyResumeInfoDto onlyResumeInfoDto);
     }
 }

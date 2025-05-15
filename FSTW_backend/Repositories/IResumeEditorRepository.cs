@@ -42,6 +42,6 @@ namespace FSTW_backend.Repositories
 
         public Task DeleteResume(Resume resume);
 
-        public Task ChangeOnceResumeInfo(Resume resume, ChangeResumeInfoDto changeResumeInfoDto);
+        public Task ChangeOnceResumeInfo(Resume resume, OnlyResumeInfoDto onlyResumeInfoDto);
     }
 }

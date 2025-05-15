@@ -1,6 +1,6 @@
 ﻿namespace FSTW_backend.Dto.ResumeDto
 {
-    public class ChangeResumeInfoDto
+    public class OnlyResumeInfoDto
     {
         public string Hobbies { get; set; }
         public string About { get; set; }

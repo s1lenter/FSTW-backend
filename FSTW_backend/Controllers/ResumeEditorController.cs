@@ -99,6 +99,15 @@ namespace FSTW_backend.Controllers
             return BadRequest(response.Errors);
         }
 
+        [HttpGet("only_resume_info/{resumeId}")]
+        public async Task<IActionResult> GetOnlyResumeInfo([FromRoute] int resumeId)
+        {
+            var response = await _service.GetOnlyResumeInfo(GetUserId(), resumeId);
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
+        }
+
         [HttpDelete("remove/{resumeId}")]
         public async Task<IActionResult> DeleteResume([FromRoute] int resumeId)
         {
@@ -123,9 +132,9 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("change_resume/{resumeId}")]
-        public async Task<IActionResult> ChangeResumeInfo([FromBody] ChangeResumeInfoDto changeResumeInfoDto, [FromRoute] int resumeId)
+        public async Task<IActionResult> ChangeResumeInfo([FromBody] OnlyResumeInfoDto onlyResumeInfoDto, [FromRoute] int resumeId)
         {
-            var response = await _service.ChangeResumeInfo(GetUserId(), resumeId, changeResumeInfoDto);
+            var response = await _service.ChangeResumeInfo(GetUserId(), resumeId, onlyResumeInfoDto);
             if (response.Successed)
                 return Ok(response.Value);
             return BadRequest(response.Errors);

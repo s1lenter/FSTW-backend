@@ -179,6 +179,33 @@ namespace FSTW_backend.Services
             return ResponseResult<AllResumeInfoDto>.Success(CreateResumeInfo(user, resume, profile, projects, achievements, educations));
         }
 
+        public async Task<ResponseResult<OnlyResumeInfoDto>> GetOnlyResumeInfo(int userId, int resumeId)
+        {
+            var resume = await _repository.GetCurrentResume(userId, resumeId);
+            if (resume is null)
+                return ResponseResult<OnlyResumeInfoDto>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Резюме с таким Id не существует"}
+                });
+
+            var projects = _repository.GetProjects(resumeId);
+            var educations = _repository.GetEducations(resumeId);
+            var achievements = _repository.GetAchievements(resumeId);
+
+            var result = new OnlyResumeInfoDto()
+            {
+                About = resume.About,
+                Hobbies = resume.About,
+                Skills = resume.Skills,
+                Experience = resume.Experience,
+                Projects = MapLists<Project, ProjectDto>(projects),
+                Educations = MapLists<Education, EducationDto>(educations),
+                Achievements = MapLists<Achievement, AchievementDto>(achievements)
+            };
+
+            return ResponseResult<OnlyResumeInfoDto>.Success(result);
+        }
+
         public async Task<ResponseResult<int>> DeleteResume(int userId, int resumeId)
         {
             var resume = await _repository.GetCurrentResume(userId, resumeId);
@@ -191,7 +218,7 @@ namespace FSTW_backend.Services
             return ResponseResult<int>.Success(resumeId);
         }
 
-        public async Task<ResponseResult<int>> ChangeResumeInfo(int userId, int resumeId, ChangeResumeInfoDto changeResumeInfoDto)
+        public async Task<ResponseResult<int>> ChangeResumeInfo(int userId, int resumeId, OnlyResumeInfoDto onlyResumeInfoDto)
         {
             var resume = await _repository.GetCurrentResume(userId, resumeId);
             if (resume is null)
@@ -199,7 +226,7 @@ namespace FSTW_backend.Services
                 {
                     new () {["Error"] = "Резюме с таким Id не существует"}
                 });
-            await _repository.ChangeOnceResumeInfo(resume, changeResumeInfoDto);
+            await _repository.ChangeOnceResumeInfo(resume, onlyResumeInfoDto);
 
             var projectsExist = _repository.GetProjects(resumeId);
             if (projectsExist.Count != 0)
@@ -213,9 +240,9 @@ namespace FSTW_backend.Services
             if (educationsExist.Count != 0)
                 await _repository.RemoveEducations(educationsExist);
 
-            await _repository.SendProjects(resume, ConvertProjects(resumeId, changeResumeInfoDto.Projects, resume));
-            await _repository.SendAchievements(resume, ConvertAchievements(resumeId, changeResumeInfoDto.Achievements, resume));
-            await _repository.SendEducation(resume, ConvertEducations(resumeId, changeResumeInfoDto.Educations, resume));
+            await _repository.SendProjects(resume, ConvertProjects(resumeId, onlyResumeInfoDto.Projects, resume));
+            await _repository.SendAchievements(resume, ConvertAchievements(resumeId, onlyResumeInfoDto.Achievements, resume));
+            await _repository.SendEducation(resume, ConvertEducations(resumeId, onlyResumeInfoDto.Educations, resume));
 
             return ResponseResult<int>.Success(resumeId);
         }

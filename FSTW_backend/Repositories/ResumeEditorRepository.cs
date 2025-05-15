@@ -85,12 +85,12 @@ namespace FSTW_backend.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task ChangeOnceResumeInfo(Resume resume, ChangeResumeInfoDto changeResumeInfoDto)
+        public async Task ChangeOnceResumeInfo(Resume resume, OnlyResumeInfoDto onlyResumeInfoDto)
         {
-            resume.About = changeResumeInfoDto.About;
-            resume.Hobbies = changeResumeInfoDto.Hobbies;
-            resume.Experience = changeResumeInfoDto.Experience;
-            resume.Skills = changeResumeInfoDto.Skills;
+            resume.About = onlyResumeInfoDto.About;
+            resume.Hobbies = onlyResumeInfoDto.Hobbies;
+            resume.Experience = onlyResumeInfoDto.Experience;
+            resume.Skills = onlyResumeInfoDto.Skills;
 
             _context.SaveChangesAsync();
         }

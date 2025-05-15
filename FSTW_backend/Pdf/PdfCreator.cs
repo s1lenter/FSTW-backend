@@ -40,12 +40,6 @@ namespace FSTW_backend.Pdf
                                         column.Item()
                                             .Text(text =>
                                             {
-                                                text.Span("Образование: ").SemiBold();
-                                                text.Span($"{resumeInfo.Educations[0].Level}");
-                                            });
-                                        column.Item()
-                                            .Text(text =>
-                                            {
                                                 text.Span("Дата рождения: ").SemiBold();
                                                 text.Span(resumeInfo.DateOfBirth.ToString("dd.MM.yyyy"));
                                             });
@@ -77,33 +71,48 @@ namespace FSTW_backend.Pdf
                                             .PaddingBottom(3)
                                             .Text($"{resumeInfo.Email}");
 
-                                        column.Item()
-                                            .Text("Telegram:")
-                                            .SemiBold();
-                                        column.Item()
-                                            .PaddingBottom(3)
-                                            .Text($"{resumeInfo.Telegram}").FontColor(Colors.Blue.Accent4);
+                                        if (resumeInfo.Telegram != "Не указано" && resumeInfo.Telegram != ""
+                                            && resumeInfo.Telegram != "-")
+                                        {
+                                            column.Item()
+                                                .Text("Telegram:")
+                                                .SemiBold();
+                                            column.Item()
+                                                .PaddingBottom(3)
+                                                .Text($"{resumeInfo.Telegram}").FontColor(Colors.Blue.Accent4);
+                                        }
 
-                                        column.Item()
-                                            .Text("VK:")
-                                            .SemiBold();
-                                        column.Item()
-                                            .PaddingBottom(3)
-                                            .Text($"{resumeInfo.Vk}").FontColor(Colors.Blue.Accent4);
+                                        if (resumeInfo.Vk != "Не указано" && resumeInfo.Vk != "" && resumeInfo.Vk != "-")
+                                        {
+                                            column.Item()
+                                                .Text("VK:")
+                                                .SemiBold();
+                                            column.Item()
+                                                .PaddingBottom(3)
+                                                .Text($"{resumeInfo.Vk}").FontColor(Colors.Blue.Accent4);
+                                        }
 
-                                        column.Item()
-                                            .Text("GitHub:")
-                                            .SemiBold();
-                                        column.Item()
-                                            .PaddingBottom(3)
-                                            .Text($"{resumeInfo.GitHub}").FontColor(Colors.Blue.Accent4);
+                                        if (resumeInfo.GitHub != "Не указано" && resumeInfo.GitHub != ""
+                                            && resumeInfo.GitHub != "-")
+                                        {
+                                            column.Item()
+                                                .Text("GitHub:")
+                                                .SemiBold();
+                                            column.Item()
+                                                .PaddingBottom(3)
+                                                .Text($"{resumeInfo.GitHub}").FontColor(Colors.Blue.Accent4);
+                                        }
 
-                                        column.Item()
-                                            .Text("Linkedin:")
-                                            .SemiBold();
-                                        column.Item()
-                                            .PaddingBottom(3)
-                                            .Text($"{resumeInfo.Linkedin}").FontColor(Colors.Blue.Accent4);
+                                        if (resumeInfo.Linkedin != "Не указано" && resumeInfo.Linkedin != ""
+                                            && resumeInfo.Linkedin != "-")
+                                        {
+                                            column.Item()
+                                                .Text("Linkedin:")
+                                                .SemiBold();
+                                            column.Item()
+                                                .PaddingBottom(3)
+                                                .Text($"{resumeInfo.Linkedin}").FontColor(Colors.Blue.Accent4);
+                                        }
                                     });
 
                                     twoColumns.ConstantItem(1)
