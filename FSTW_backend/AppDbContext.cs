@@ -19,6 +19,8 @@ namespace FSTW_backend
         public DbSet<Resume> Resume { get; set; } = null!;
         public DbSet<RefreshToken> RefreshToken { get; set; } = null!;
 
+        public DbSet<ChatHistory> ChatHistory { get; set; } = null!;
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
 

@@ -195,7 +195,7 @@ namespace FSTW_backend.Services
             var result = new OnlyResumeInfoDto()
             {
                 About = resume.About,
-                Hobbies = resume.About,
+                Hobbies = resume.Hobbies,
                 Skills = resume.Skills,
                 Experience = resume.Experience,
                 Projects = MapLists<Project, ProjectDto>(projects),

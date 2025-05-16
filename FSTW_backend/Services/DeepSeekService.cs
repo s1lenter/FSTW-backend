@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using FSTW_backend.Models;
 
 namespace FSTW_backend.Services
 {
@@ -12,7 +13,7 @@ namespace FSTW_backend.Services
 
         public DeepSeekService()
         {
-            _apiKey = "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";
+            _apiKey = "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";
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://openrouter.ai/api/v1/chat/completions");
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
@@ -23,19 +24,31 @@ namespace FSTW_backend.Services
             //_client.AddDefaultHeader("Content-Type", "application/json");
         }
 
-        public async Task<string> SendMessageAsync(string userMessage)
+        public async Task<string> SendMessageAsync(string userMessage, List<ChatHistory> contextList)
         {
 
             var httpRequest = new HttpRequestMessage(new HttpMethod("POST"), _httpClient.BaseAddress);
 
+
+            var content = $"{userMessage}";
+
+            if (contextList.Count != 0)
+            {
+                content += ", предыдущий контекст вопросов был такой:";
+                foreach (var context in contextList)
+                {
+                    content += $"{context.Message}";
+                }
+            }
+
             var json = JsonSerializer.Serialize(new
             {
-                model = "deepseek/deepseek-r1",
+                model = "microsoft/mai-ds-r1:free",
                 messages = new[]
                 {
-                    //new { role = "system", content = "Ты помощник с составлением резюме, есть определенная структура, тебе скинут текст резюме по блокам, ты должен оценить и сказать что можно улучшить"},
-                    new { role = "user", content = userMessage }
-                },
+                //new { role = "system", content = "Ты помощник с составлением резюме, есть определенная структура, тебе скинут текст резюме по блокам, ты должен оценить и сказать что можно улучшить"},
+                new { role = "user", content = content }
+            },
             });
 
             httpRequest.Content = new StringContent(json);
