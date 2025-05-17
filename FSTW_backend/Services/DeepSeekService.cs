@@ -17,11 +17,6 @@ namespace FSTW_backend.Services
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://openrouter.ai/api/v1/chat/completions");
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
-            //_httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
-
-            //_client = new RestClient("https://openrouter.ai/api/v1/chat/completions");
-            //_client.AddDefaultHeader("Authorization", $"Bearer {_apiKey}");
-            //_client.AddDefaultHeader("Content-Type", "application/json");
         }
 
         public async Task<string> SendMessageAsync(string userMessage, List<ChatHistory> contextList)
@@ -58,30 +53,6 @@ namespace FSTW_backend.Services
             JsonDocument doc = JsonDocument.Parse(response);
             var message = doc.RootElement.GetProperty("choices")[0].GetProperty("message").GetProperty("content");
             return message.ToString();
-
-            //var request = new RestRequest
-            //{
-            //    Method = Method.Post
-            //};
-
-            //request.AddJsonBody(new
-            //{
-            //    model = "deepseek/deepseek-r1",
-            //    messages = new[]
-            //    {
-            //        //new { role = "system", content = "Ты помощник с составлением резюме, есть определенная структура, тебе скинут текст резюме по блокам, ты должен оценить и сказать что можно улучшить"},
-            //        new { role = "user", content = userMessage }
-            //    },
-            //});
-
-            //var response = await _client.ExecuteAsync<ChatResponse>(request);
-
-            //if (!response.IsSuccessful)
-            //{
-            //    throw new Exception($"Error: {response.StatusCode} - {response.ErrorMessage}");
-            //}
-
-            //return response.Data?.Choices?.FirstOrDefault()?.Message?.Content ?? "No response from DeepSeek.";
         }
     }
 }

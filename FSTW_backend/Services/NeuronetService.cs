@@ -10,12 +10,34 @@ namespace FSTW_backend.Services
         {
             _repository = new NeuronetRepository(context);
         }
-        public async Task<ResponseResult<string>> GetAnswer(string question)
+        public async Task<ResponseResult<string>> GetAnswer(string question, HttpClient client)
         {
-            var deepSeekService = new DeepSeekService();
-            var prevMes = await _repository.GetPrevMessages();
-            var response = await deepSeekService.SendMessageAsync(question, prevMes);
-            await _repository.AddMessage(question);
+            var aiService = new GptService(client);
+            var prevMessages = await _repository.GetPrevMessages();
+            var context = new List<Dictionary<string, string>>();
+
+            foreach (var message in prevMessages)
+            {
+                context.Add(new Dictionary<string, string>()
+                {
+                    ["role"] = "user",
+                    ["content"] = $"{message.Message}"
+                });
+                context.Add(new Dictionary<string, string>()
+                {
+                    ["role"] = "assistant",
+                    ["content"] = $"{message.Answer}"
+                });
+            }
+
+            context.Add(new Dictionary<string, string>()
+            {
+                ["role"] = "user",
+                ["content"] = $"{question}"
+            });
+
+            var response = await aiService.SendRequest(question, context);
+            await _repository.AddMessage(question, response);
             return ResponseResult<string>.Success(response);
         }
     }

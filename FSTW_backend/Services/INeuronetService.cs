@@ -2,6 +2,6 @@
 {
     public interface INeuronetService
     {
-        public Task<ResponseResult<string>> GetAnswer(string question);
+        public Task<ResponseResult<string>> GetAnswer(string question, HttpClient client);
     }
 }

@@ -92,7 +92,7 @@ namespace FSTW_backend.Repositories
             resume.Experience = onlyResumeInfoDto.Experience;
             resume.Skills = onlyResumeInfoDto.Skills;
 
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public List<Project> GetProjects(int resumeId)
