@@ -2,11 +2,13 @@
 using FSTW_backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FSTW_backend.Controllers
 {
     [ApiController]
     [Route("neuronet")]
+    [Authorize]
     public class NeuronetController : ControllerBase
     {
         private INeuronetService _service;
@@ -18,25 +20,22 @@ namespace FSTW_backend.Controllers
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        [HttpPost("/send")]
-        public async Task<IActionResult> SendQuestion([FromBody] string question)
+        [HttpPost("/send/{resumeId}")]
+        public async Task<IActionResult> SendQuestion([FromServices] IResumeEditorService resumeEditorService, [FromBody] string question, [FromRoute] int resumeId)
         {
-            var response = await _service.GetAnswer(question, _httpClient);
+            var resumeResponse = await resumeEditorService.GetOnlyResumeInfo(GetUserId(), resumeId);
+            if (!resumeResponse.Successed)
+                return BadRequest(resumeResponse.Errors);
+            var response = await _service.GetAnswer(resumeResponse.Value, question, _httpClient);
             if (!response.Successed)
                 return BadRequest();
             return Ok(response.Value);
         }
 
-        //[HttpPost("py")]
-        //public async Task<IActionResult> GetPy([FromBody] string message)
-        //{
-        //    var response = _service.GetAnswer(ques)
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        return Ok(content);
-        //    }
-
-        //    return BadRequest();
-        //}
+        private int GetUserId()
+        {
+            return int.Parse(HttpContext.User.Claims.FirstOrDefault(c =>
+                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")!.Value);
+        }
     }
 }

@@ -13,15 +13,6 @@ namespace FSTW_backend.Services
 
         public async Task<string> SendRequest(string message, List<Dictionary<string, string>> contextList)
         {
-            //var systemPrev = $"{message}";
-
-            //if (contextList.Count != 0)
-            //{
-            //    systemPrev += "предыдущий контекст вопросов был такой:";
-            //    foreach (var context in contextList)
-            //        systemPrev += $" {context.Message};";
-            //}
-
             var jsonContent = JsonContent.Create(contextList);
 
             var response = await _httpClient.PostAsync("http://localhost:7000/api/hello", jsonContent);
