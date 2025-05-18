@@ -13,10 +13,10 @@ namespace FSTW_backend.Services
         {
             _neuroRepository = new NeuronetRepository(context);
         }
-        public async Task<ResponseResult<string>> GetResumeAnswer(OnlyResumeInfoDto resumeInfoDto, string question, HttpClient client)
+        public async Task<ResponseResult<string>> GetResumeAnswer(int userId, int resumeId, OnlyResumeInfoDto resumeInfoDto, string question, HttpClient client)
         {
             var aiService = new GptService(client);
-            var prevMessages = await _neuroRepository.GetResumePrevMessages();
+            var prevMessages = await _neuroRepository.GetResumePrevMessages(userId, resumeId);
             var context = new List<Dictionary<string, string>>();
 
             foreach (var message in prevMessages)
@@ -83,14 +83,14 @@ namespace FSTW_backend.Services
             });
 
             var response = await aiService.SendRequest(question, context);
-            await _neuroRepository.AddResumeMessage(question, response);
+            await _neuroRepository.AddResumeMessage(userId, resumeId, question, response);
             return ResponseResult<string>.Success(response);
         }
 
         public async Task<ResponseResult<string>> GetDefaultAnswer(int userId, string question, HttpClient client)
         {
             var aiService = new GptService(client);
-            var prevMessages = await _neuroRepository.GetDefaultPrevMessages();
+            var prevMessages = await _neuroRepository.GetDefaultPrevMessages(userId);
             var context = new List<Dictionary<string, string>>();
 
             foreach (var message in prevMessages)

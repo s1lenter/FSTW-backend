@@ -22,6 +22,6 @@
         public List<Education> Educations { get; set; }
         public List<Expirience> Expiriences { get; set; }
         public Contact Contact { get; set; }
-        public ChatHistory ChatHistory { get; set; }
+        public List<ChatHistory> ChatHistories { get; set; }
     }
 }

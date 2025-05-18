@@ -20,19 +20,19 @@ namespace FSTW_backend.Controllers
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        [HttpPost("/send/{resumeId}")]
+        [HttpPost("/resume_chat/send/{resumeId}")]
         public async Task<IActionResult> SendQuestion([FromServices] IResumeEditorService resumeEditorService, [FromBody] string question, [FromRoute] int resumeId)
         {
             var resumeResponse = await resumeEditorService.GetOnlyResumeInfo(GetUserId(), resumeId);
             if (!resumeResponse.Successed)
                 return BadRequest(resumeResponse.Errors);
-            var response = await _service.GetResumeAnswer(resumeResponse.Value, question, _httpClient);
+            var response = await _service.GetResumeAnswer(GetUserId(), resumeId, resumeResponse.Value, question, _httpClient);
             if (!response.Successed)
                 return BadRequest();
             return Ok(response.Value);
         }
 
-        [HttpPost("/default_chat")]
+        [HttpPost("/default_chat/send")]
         public async Task<IActionResult> SendQuestion([FromBody] string question)
         {
             var response = await _service.GetDefaultAnswer(GetUserId(), question, _httpClient);

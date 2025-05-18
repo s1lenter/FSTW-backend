@@ -11,9 +11,15 @@ namespace FSTW_backend.Repositories
         {
             _context = context;
         }
-        public async Task AddResumeMessage(string message, string answer)
+        public async Task AddResumeMessage(int userId, int resumeId, string message, string answer)
         {
-            await _context.ChatHistory.AddAsync(new ChatHistory() { Message = message , Answer = answer});
+            await _context.ChatHistory.AddAsync(new ChatHistory()
+            {
+                Message = message, 
+                Answer = answer,
+                ResumeId = resumeId,
+                UserId = userId
+            });
             await _context.SaveChangesAsync();
         }
 
@@ -28,14 +34,14 @@ namespace FSTW_backend.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<ChatHistory>> GetResumePrevMessages()
+        public async Task<List<ChatHistory>> GetResumePrevMessages(int userId, int resumeId)
         {
-            return await _context.ChatHistory.Take(10).ToListAsync();
+            return await _context.ChatHistory.Where(h => h.UserId == userId && h.ResumeId == resumeId).Take(10).ToListAsync();
         }
 
-        public async Task<List<HelperChatHistory>> GetDefaultPrevMessages()
+        public async Task<List<HelperChatHistory>> GetDefaultPrevMessages(int userId)
         {
-            return await _context.HelperChatHistory.Take(10).ToListAsync();
+            return await _context.HelperChatHistory.Where(h => h.UserId == userId).Take(10).ToListAsync();
         }
     }
 }
