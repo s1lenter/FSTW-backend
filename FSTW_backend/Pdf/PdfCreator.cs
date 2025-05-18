@@ -88,7 +88,7 @@ namespace FSTW_backend.Pdf
                                                 .Text("VK:")
                                                 .SemiBold();
                                             column.Item()
-                                                .PaddingBottom(3)
+                                                .PaddingBottom(3).Hyperlink($"{resumeInfo.Vk}")
                                                 .Text($"{resumeInfo.Vk}").FontColor(Colors.Blue.Accent4);
                                         }
 
@@ -99,7 +99,7 @@ namespace FSTW_backend.Pdf
                                                 .Text("GitHub:")
                                                 .SemiBold();
                                             column.Item()
-                                                .PaddingBottom(3)
+                                                .PaddingBottom(3).Hyperlink($"{resumeInfo.GitHub}")
                                                 .Text($"{resumeInfo.GitHub}").FontColor(Colors.Blue.Accent4);
                                         }
 
@@ -110,7 +110,7 @@ namespace FSTW_backend.Pdf
                                                 .Text("Linkedin:")
                                                 .SemiBold();
                                             column.Item()
-                                                .PaddingBottom(3)
+                                                .PaddingBottom(3).Hyperlink($"{resumeInfo.Linkedin}")
                                                 .Text($"{resumeInfo.Linkedin}").FontColor(Colors.Blue.Accent4);
                                         }
                                     });

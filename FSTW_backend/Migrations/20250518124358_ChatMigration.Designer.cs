@@ -3,6 +3,7 @@ using System;
 using FSTW_backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FSTW_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518124358_ChatMigration")]
+    partial class ChatMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,7 +74,8 @@ namespace FSTW_backend.Migrations
                     b.HasIndex("ResumeId")
                         .IsUnique();
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("ChatHistory");
                 });
@@ -208,7 +212,8 @@ namespace FSTW_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("HelperChatHistory");
                 });
@@ -529,8 +534,8 @@ namespace FSTW_backend.Migrations
                         .IsRequired();
 
                     b.HasOne("FSTW_backend.Models.User", "User")
-                        .WithMany("ChatHistory")
-                        .HasForeignKey("UserId")
+                        .WithOne("ChatHistory")
+                        .HasForeignKey("FSTW_backend.Models.ChatHistory", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -594,8 +599,8 @@ namespace FSTW_backend.Migrations
             modelBuilder.Entity("FSTW_backend.Models.HelperChatHistory", b =>
                 {
                     b.HasOne("FSTW_backend.Models.User", "User")
-                        .WithMany("HelperChatHistory")
-                        .HasForeignKey("UserId")
+                        .WithOne("HelperChatHistory")
+                        .HasForeignKey("FSTW_backend.Models.HelperChatHistory", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -704,11 +709,13 @@ namespace FSTW_backend.Migrations
 
             modelBuilder.Entity("FSTW_backend.Models.User", b =>
                 {
-                    b.Navigation("ChatHistory");
+                    b.Navigation("ChatHistory")
+                        .IsRequired();
 
                     b.Navigation("Favorites");
 
-                    b.Navigation("HelperChatHistory");
+                    b.Navigation("HelperChatHistory")
+                        .IsRequired();
 
                     b.Navigation("Profile")
                         .IsRequired();

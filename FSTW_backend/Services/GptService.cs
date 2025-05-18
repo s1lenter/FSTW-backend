@@ -15,7 +15,8 @@ namespace FSTW_backend.Services
         {
             var jsonContent = JsonContent.Create(contextList);
 
-            var response = await _httpClient.PostAsync("http://localhost:7000/api/hello", jsonContent);
+            //var response = await _httpClient.PostAsync("http://neuro:5000/api/hello", jsonContent);
+            var response = await _httpClient.PostAsync("http://10.13.79.113:5000/api/hello", jsonContent);
             if (!response.IsSuccessStatusCode)
                 return null;
             var content = await response.Content.ReadAsStringAsync();

@@ -21,6 +21,8 @@ namespace FSTW_backend
 
         public DbSet<ChatHistory> ChatHistory { get; set; } = null!;
 
+        public DbSet<HelperChatHistory> HelperChatHistory { get; set; } = null!;
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
 

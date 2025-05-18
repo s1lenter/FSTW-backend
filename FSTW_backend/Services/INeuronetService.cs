@@ -4,6 +4,8 @@ namespace FSTW_backend.Services
 {
     public interface INeuronetService
     {
-        public Task<ResponseResult<string>> GetAnswer(OnlyResumeInfoDto resumeInfoDto, string question, HttpClient client);
+        public Task<ResponseResult<string>> GetResumeAnswer(OnlyResumeInfoDto resumeInfoDto, string question, HttpClient client);
+
+        public Task<ResponseResult<string>> GetDefaultAnswer(int userId, string question, HttpClient client);
     }
 }

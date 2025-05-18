@@ -5,8 +5,12 @@ namespace FSTW_backend.Repositories
 {
     public interface INeuronetRepository
     {
-        public Task AddMessage(string message, string answer);
+        public Task AddResumeMessage(string message, string answer);
 
-        public Task<List<ChatHistory>> GetPrevMessages();
+        public Task AddDefaultMessage(string message, string answer, int userId);
+
+        public Task<List<ChatHistory>> GetResumePrevMessages();
+
+        public Task<List<HelperChatHistory>> GetDefaultPrevMessages();
     }
 }

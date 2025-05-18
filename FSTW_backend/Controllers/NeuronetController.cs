@@ -26,9 +26,18 @@ namespace FSTW_backend.Controllers
             var resumeResponse = await resumeEditorService.GetOnlyResumeInfo(GetUserId(), resumeId);
             if (!resumeResponse.Successed)
                 return BadRequest(resumeResponse.Errors);
-            var response = await _service.GetAnswer(resumeResponse.Value, question, _httpClient);
+            var response = await _service.GetResumeAnswer(resumeResponse.Value, question, _httpClient);
             if (!response.Successed)
                 return BadRequest();
+            return Ok(response.Value);
+        }
+
+        [HttpPost("/default_chat")]
+        public async Task<IActionResult> SendQuestion([FromBody] string question)
+        {
+            var response = await _service.GetDefaultAnswer(GetUserId(), question, _httpClient);
+            if (!response.Successed)
+                return BadRequest(response.Errors);
             return Ok(response.Value);
         }
 

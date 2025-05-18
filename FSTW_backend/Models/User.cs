@@ -20,5 +20,7 @@ namespace FSTW_backend.Models
         public List<Resume> Resumes { get; set; }
         [JsonIgnore]
         public RefreshToken RefreshToken { get; set; }
+        public List<HelperChatHistory> HelperChatHistory { get; set; }
+        public List<ChatHistory> ChatHistory { get; set; }
     }
 }
