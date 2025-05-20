@@ -7,8 +7,8 @@ namespace FSTW_backend.Models
     {
         public int Id { get; set; }
         public string FirstName { get; set; } = "Имя";
-        public string LastName { get; set; } = "фамилия";
-        public string MiddleName { get; set; } = "отчество";
+        public string LastName { get; set; } = "Фамилия";
+        public string MiddleName { get; set; } = "Отчество";
         public string Gender { get; set; } = "Не указано";
         public string Skills { get; set; } = "Не указано";
         public DateTime DateOfBirth { get; set; } = DateTime.UtcNow;

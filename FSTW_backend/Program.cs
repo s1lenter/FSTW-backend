@@ -71,6 +71,8 @@ namespace FSTW_backend
 
             builder.Services.AddScoped<INeuronetService, NeuronetService>();
 
+            builder.Services.AddScoped<IInternshipService, InternshipService>();
+
             builder.Services.AddHttpClient();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -95,13 +97,6 @@ namespace FSTW_backend
             app.Logger.LogInformation(connectionString);
 
             app.UseMiddleware<TokenHeaderMiddleware>();
-
-            //app.Use(async (context, next) =>
-            //{
-            //    context.Response.Headers.Add("Access-Control-Expose-Headers", "*");
-            //    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            //    await next();
-            //});
 
             if (app.Environment.IsDevelopment())
             {

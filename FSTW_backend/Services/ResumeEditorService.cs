@@ -26,7 +26,7 @@ namespace FSTW_backend.Services
             {
                 var pcResDto = new PersonalCabinetResumeDto();
                 pcResDto.Id = resume.Id;
-                pcResDto.Title = "Placeholder";
+                pcResDto.Title = "Резюме";
                 result.Add(pcResDto);
             }
             return ResponseResult<List<PersonalCabinetResumeDto>>.Success(result);

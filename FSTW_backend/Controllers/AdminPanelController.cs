@@ -16,8 +16,20 @@ namespace FSTW_backend.Controllers
             _service = service;
         }
 
+        [HttpPost("create/multiply")]
+        public async Task<IActionResult> CreateInternship([FromBody] List<InternshipDto> internshipDtos)
+        {
+            foreach (var internshipDto in internshipDtos)
+            {
+                var response = await _service.CreateInternship(internshipDto);
+                if (!response.Successed)
+                    return BadRequest(response.Errors);
+            }
+            return Ok();
+        }
+
         [HttpPost("create")]
-        public async Task<IActionResult> CreateInternship([FromForm] InternshipDto internshipDto)
+        public async Task<IActionResult> CreateInternship([FromBody] InternshipDto internshipDto)
         {
             var response = await _service.CreateInternship(internshipDto);
             if (response.Successed)
