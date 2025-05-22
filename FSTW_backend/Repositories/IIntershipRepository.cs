@@ -1,10 +1,10 @@
-﻿using FSTW_backend.Models;
+﻿using FSTW_backend.Dto;
+using FSTW_backend.Models;
 
 namespace FSTW_backend.Repositories
 {
     public interface IIntershipRepository
     {
-        public List<Internship> GetAllInternships();
-        public Task<Internship> GetInternshipById(int id);
+        public Task<List<Internship>> GetInternships(InternshipFiltersDto filters);
     }
 }

@@ -15,16 +15,11 @@ namespace FSTW_backend.Services
             _repository = new InternshipRepository(context);
         }
 
-        public ResponseResult<List<InternshipDto>> GetAllInternships()
+        public async Task<ResponseResult<List<InternshipDto>>> GetInternships(InternshipFiltersDto filters)
         {
-            var internships = _repository.GetAllInternships();
+            var internships = await _repository.GetInternships(filters);
             var internshipDtos = MapLists<Internship, InternshipDto>(internships);
             return ResponseResult<List<InternshipDto>>.Success(internshipDtos);
-        }
-
-        public Task<ResponseResult<InternshipDto>> GetInternshipById(string id)
-        {
-            throw new NotImplementedException();
         }
 
         private List<TResult> MapLists<TSource, TResult>(List<TSource> sourceList)

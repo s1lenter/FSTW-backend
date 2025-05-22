@@ -1,4 +1,6 @@
-﻿using FSTW_backend.Models;
+﻿using FSTW_backend.Dto;
+using FSTW_backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FSTW_backend.Repositories
 {
@@ -9,14 +11,22 @@ namespace FSTW_backend.Repositories
         {
             _context = context;
         }
-        public List<Internship> GetAllInternships()
+        public async Task<List<Internship>> GetInternships(InternshipFiltersDto filters)
         {
-            return _context.Internship.Where(i => !i.isArchive).ToList();
-        }
+            var query = _context.Internship.AsQueryable().Where(i => !i.isArchive);
 
-        public Task<Internship> GetInternshipById(int id)
-        {
-            throw new NotImplementedException();
+            if (filters.WorkFormat is not null)
+                query = query.Where(i => i.WorkFormat == filters.WorkFormat);
+
+            if (filters.Salary == "Да")
+                query = query.Where(i => i.SalaryTo != 0 || i.SalaryFrom != 0);
+            else if (filters.Salary == "Нет")
+                query = query.Where(i => i.SalaryTo == 0 && i.SalaryFrom == 0);
+
+            if (filters.Direction is not null)
+                query = query.Where(i => i.Direction == filters.Direction);
+
+            return await query.ToListAsync();
         }
     }
 }
