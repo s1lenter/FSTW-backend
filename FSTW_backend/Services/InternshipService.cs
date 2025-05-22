@@ -22,6 +22,38 @@ namespace FSTW_backend.Services
             return ResponseResult<List<InternshipDto>>.Success(internshipDtos);
         }
 
+        public async Task<ResponseResult<List<InternshipDto>>> GetFavoriteInternships(int userId)
+        {
+            var favorites = await _repository.GetFavorites(userId);
+            var favInternships = await _repository.GetFavoriteInternships(favorites);
+            var favInternshipDtos = MapLists<Internship, InternshipDto>(favInternships);
+            return ResponseResult<List<InternshipDto>>.Success(favInternshipDtos);
+        }
+
+        public async Task<ResponseResult<Favorite>> AddFavoriteInternship(int userId, int internshipId)
+        {
+            var favorite = new Favorite()
+            {
+                SavedAt = DateTime.UtcNow,
+                InternshipId = internshipId,
+                UserID = userId
+            };
+
+            await _repository.AddFavoriteInternship(favorite);
+            return ResponseResult<Favorite>.Success(favorite);
+        }
+
+        public async Task<ResponseResult<int>> RemoveFavoriteInternship(int userId, int internshipId)
+        {
+            var fav = await _repository.GetFavoriteInternship(userId, internshipId);
+            if (fav is null)
+                return ResponseResult<int>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Стажировки с таким Id не существует"}
+                });
+            return ResponseResult<int>.Success(await _repository.DeleteFavoriteInternship(fav));
+        }
+
         private List<TResult> MapLists<TSource, TResult>(List<TSource> sourceList)
             where TResult : new()
         {

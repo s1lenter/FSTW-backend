@@ -28,5 +28,45 @@ namespace FSTW_backend.Repositories
 
             return await query.ToListAsync();
         }
+
+        public async Task<List<Favorite>> GetFavorites(int userId)
+        {
+            return await _context.Favorite.Where(f => f.UserID == userId).ToListAsync();
+        }
+
+        public async Task<List<Internship>> GetFavoriteInternships(List<Favorite> favorites)
+        {
+            var result = new List<Internship>();
+
+            foreach (var favorite in favorites)
+                result.Add(GetInternship(favorite.InternshipId));
+            return result;
+        }
+
+        public async Task AddFavoriteInternship(Favorite favorite)
+        {
+            _context.Favorite.Add(favorite);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Favorite> GetFavoriteInternship(int userId, int internshipId)
+        {
+            var fav = await _context.Favorite.FirstOrDefaultAsync(f => 
+                f.InternshipId == internshipId && f.UserID == userId);
+            return fav;
+        }
+
+        public async Task<int> DeleteFavoriteInternship(Favorite favorite)
+        {
+            _context.Favorite.Remove(favorite);
+            await _context.SaveChangesAsync();
+            return favorite.Id;
+        }
+
+        private Internship GetInternship(int internshipId)
+        {
+            return _context.Internship.FirstOrDefault(i => i.Id == internshipId);
+        }
+
     }
 }

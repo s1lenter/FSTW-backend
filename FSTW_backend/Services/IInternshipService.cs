@@ -1,4 +1,5 @@
 ﻿using FSTW_backend.Dto;
+using FSTW_backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FSTW_backend.Services
@@ -6,5 +7,11 @@ namespace FSTW_backend.Services
     public interface IInternshipService
     {
         public Task<ResponseResult<List<InternshipDto>>> GetInternships(InternshipFiltersDto filters);
+
+        public Task<ResponseResult<List<InternshipDto>>> GetFavoriteInternships(int userId);
+
+        public Task<ResponseResult<Favorite>> AddFavoriteInternship(int userId, int internshipId);
+
+        public Task<ResponseResult<int>> RemoveFavoriteInternship(int userId, int internshipId);
     }
 }
