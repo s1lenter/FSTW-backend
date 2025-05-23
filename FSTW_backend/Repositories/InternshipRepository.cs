@@ -39,7 +39,7 @@ namespace FSTW_backend.Repositories
             var result = new List<Internship>();
 
             foreach (var favorite in favorites)
-                result.Add(GetInternship(favorite.InternshipId));
+                result.Add(await GetInternship(favorite.InternshipId));
             return result;
         }
 
@@ -63,9 +63,9 @@ namespace FSTW_backend.Repositories
             return favorite.Id;
         }
 
-        private Internship GetInternship(int internshipId)
+        public async Task<Internship> GetInternship(int internshipId)
         {
-            return _context.Internship.FirstOrDefault(i => i.Id == internshipId);
+            return await _context.Internship.FirstOrDefaultAsync(i => i.Id == internshipId);
         }
 
     }

@@ -32,6 +32,21 @@ namespace FSTW_backend.Services
 
         public async Task<ResponseResult<Favorite>> AddFavoriteInternship(int userId, int internshipId)
         {
+            var internship = await  _repository.GetInternship(internshipId);
+
+            if (internship is null)
+                return ResponseResult<Favorite>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Стажировки с таким Id не существует"}
+                });
+
+            var sameFav = await _repository.GetFavoriteInternship(userId, internshipId);
+            if (sameFav is not null)
+                return ResponseResult<Favorite>.Failure(new List<Dictionary<string, string>>()
+                {
+                    new () {["Error"] = "Эта стажировка уже в избранном"}
+                });
+
             var favorite = new Favorite()
             {
                 SavedAt = DateTime.UtcNow,

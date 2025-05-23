@@ -37,7 +37,7 @@ namespace FSTW_backend.Controllers
         {
             var response = await _service.AddFavoriteInternship(GetUserId(), internshipId);
             if (response.Successed)
-                return Ok(response.Value);
+                return Ok();
             return BadRequest(response.Errors);
         }
 

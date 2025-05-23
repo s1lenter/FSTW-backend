@@ -16,5 +16,7 @@ namespace FSTW_backend.Repositories
         public Task AddFavoriteInternship(Favorite favorite);
 
         public Task<int> DeleteFavoriteInternship(Favorite favorite);
+
+        public Task<Internship> GetInternship(int internshipId);
     }
 }

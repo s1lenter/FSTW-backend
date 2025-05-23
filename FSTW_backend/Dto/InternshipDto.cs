@@ -9,6 +9,7 @@
         public string WorkFormat { get; set; }
         public int SalaryFrom { get; set; }
         public int SalaryTo { get; set; }
+        public string Direction { get; set; }
         public string Link { get; set; }
     }
 }
