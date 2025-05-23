@@ -1,11 +1,11 @@
 ﻿using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Models;
-using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using FSTW_backend.Dto;
 using FSTW_backend.Pdf;
+using FSTW_backend.Services.ResumeService;
 
 namespace FSTW_backend.Controllers
 {

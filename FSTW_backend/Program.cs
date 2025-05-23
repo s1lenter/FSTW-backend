@@ -1,5 +1,4 @@
 using FSTW_backend.Middlewares;
-using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +6,12 @@ using System.Text;
 using FSTW_backend.Mapping;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using FSTW_backend.Services.Auth;
+using FSTW_backend.Services.PersonalCabinet;
+using FSTW_backend.Services.ResumeService;
+using FSTW_backend.Services.Admin;
+using FSTW_backend.Services.Neuro;
+using FSTW_backend.Services.Internships;
 
 namespace FSTW_backend
 {
@@ -73,7 +78,11 @@ namespace FSTW_backend
 
             builder.Services.AddScoped<IInternshipService, InternshipService>();
 
-            builder.Services.AddHttpClient();
+            builder.Services.AddHttpClient("hh.ru")
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+                }); ;
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

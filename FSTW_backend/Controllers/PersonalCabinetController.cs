@@ -1,7 +1,7 @@
 ﻿using FSTW_backend.Dto;
 using FSTW_backend.Mapping;
 using FSTW_backend.Models;
-using FSTW_backend.Services;
+using FSTW_backend.Services.PersonalCabinet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

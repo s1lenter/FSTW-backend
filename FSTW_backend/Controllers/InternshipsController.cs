@@ -1,7 +1,11 @@
 ﻿using FSTW_backend.Dto;
-using FSTW_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using static System.Net.WebRequestMethods;
+using FSTW_backend.Services.Internships;
 
 namespace FSTW_backend.Controllers
 {
@@ -11,9 +15,11 @@ namespace FSTW_backend.Controllers
     public class InternshipsController : ControllerBase
     {
         private IInternshipService _service;
-        public InternshipsController(IInternshipService service)
+        private readonly HttpClient _httpClient;
+        public InternshipsController(IInternshipService service, IHttpClientFactory httpClientFactory)
         {
-            _service = service;    
+            _service = service;
+            _httpClient = httpClientFactory.CreateClient();
         }
 
         [HttpGet]

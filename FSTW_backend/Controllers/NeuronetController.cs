@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using FSTW_backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
+using FSTW_backend.Services.ResumeService;
+using FSTW_backend.Services.Neuro;
 
 namespace FSTW_backend.Controllers
 {

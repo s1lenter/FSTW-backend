@@ -2,7 +2,7 @@
 using FSTW_backend.Dto.AuthDto;
 using FSTW_backend.Filters;
 using FSTW_backend.Models;
-using FSTW_backend.Services;
+using FSTW_backend.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

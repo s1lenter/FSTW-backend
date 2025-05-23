@@ -14,6 +14,7 @@
 
         public string? Direction { get; set; }
         public bool isArchive { get; set; } = false;
+        public string? IdFromHh { get; set; } = null;
 
         public List<Favorite> Favorite { get; set; }
         public Requirement Requirement { get; set; }

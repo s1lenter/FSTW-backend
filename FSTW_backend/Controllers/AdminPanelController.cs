@@ -1,5 +1,5 @@
 ﻿using FSTW_backend.Dto;
-using FSTW_backend.Services;
+using FSTW_backend.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +11,11 @@ namespace FSTW_backend.Controllers
     public class AdminPanelController : ControllerBase
     {
         private IAdminService _service;
-        public AdminPanelController(IAdminService service)
+        private HttpClient _httpClient;
+        public AdminPanelController(IAdminService service, IHttpClientFactory factory)
         {
             _service = service;
+            _httpClient = factory.CreateClient();
         }
 
         [HttpPost("create/multiply")]
@@ -89,6 +91,13 @@ namespace FSTW_backend.Controllers
             if (response.Successed)
                 return Ok(response.Value);
             return BadRequest(response.Errors);
+        }
+
+        [HttpPost("hh")]
+        public async Task<IActionResult> AddInternshipsFromHh()
+        {
+            await _service.AddVacanciesFromHh(_httpClient);
+            return Ok();
         }
     }
 }
