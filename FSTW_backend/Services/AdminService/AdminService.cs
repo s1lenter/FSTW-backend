@@ -17,7 +17,7 @@ namespace FSTW_backend.Services.Admin
             _repository = new AdminRepository(context);
             _mapper = mapper;
         }
-        public async Task<ResponseResult<int>> CreateInternship(InternshipDto internshipDto)
+        public async Task<ResponseResult<int>> CreateInternship(RequestInternshipDto internshipDto)
         {
             var internship = new Internship();
             _mapper.Map(internshipDto, internship);
@@ -53,7 +53,7 @@ namespace FSTW_backend.Services.Admin
             return ResponseResult<List<InternshipDto>>.Success(dtosList);
         }
 
-        public async Task<ResponseResult<int>> EditInternship(int internshipId, InternshipDto internshipDto)
+        public async Task<ResponseResult<int>> EditInternship(int internshipId, RequestInternshipDto internshipDto)
         {
             var internship = await _repository.GetUnarchiveInternship(internshipId);
 

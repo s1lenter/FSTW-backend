@@ -19,7 +19,7 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("create/multiply")]
-        public async Task<IActionResult> CreateInternship([FromBody] List<InternshipDto> internshipDtos)
+        public async Task<IActionResult> CreateInternship([FromBody] List<RequestInternshipDto> internshipDtos)
         {
             foreach (var internshipDto in internshipDtos)
             {
@@ -31,7 +31,7 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateInternship([FromBody] InternshipDto internshipDto)
+        public async Task<IActionResult> CreateInternship([FromBody] RequestInternshipDto internshipDto)
         {
             var response = await _service.CreateInternship(internshipDto);
             if (response.Successed)
@@ -58,7 +58,7 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("edit_internship/{internshipId}")]
-        public async Task<IActionResult> EditInternship([FromRoute] int internshipId, [FromBody] InternshipDto internshipDto)
+        public async Task<IActionResult> EditInternship([FromRoute] int internshipId, [FromBody] RequestInternshipDto internshipDto)
         {
             var response = await _service.EditInternship(internshipId, internshipDto);
             if (response.Successed)

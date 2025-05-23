@@ -17,6 +17,7 @@ namespace FSTW_backend.Mapping
             CreateMap<ProjectDto, Project>().ReverseMap();
             CreateMap<AchievementDto, Achievement>().ReverseMap();
             CreateMap<InternshipDto, Internship>().ReverseMap();
+            CreateMap<RequestInternshipDto, Internship>().ReverseMap();
         }
 
         private string HashPassword(string password)
