@@ -1,5 +1,6 @@
 ﻿using FSTW_backend.Dto;
 using FSTW_backend.Dto.AuthDto;
+using FSTW_backend.Dto.InternshipDto;
 using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Models;
 using Microsoft.AspNetCore.Identity;

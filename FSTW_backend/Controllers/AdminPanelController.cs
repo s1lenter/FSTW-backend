@@ -1,4 +1,4 @@
-﻿using FSTW_backend.Dto;
+﻿using FSTW_backend.Dto.InternshipDto;
 using FSTW_backend.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-﻿namespace FSTW_backend.Dto
+﻿namespace FSTW_backend.Dto.InternshipDto
 {
     public class InternshipDto
     {
@@ -12,5 +12,6 @@
         public int SalaryTo { get; set; }
         public string Direction { get; set; }
         public string Link { get; set; }
+        public bool IsArchive { get; set; }
     }
 }

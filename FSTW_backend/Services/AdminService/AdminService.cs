@@ -5,6 +5,7 @@ using FSTW_backend.Repositories.Admin;
 using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using FSTW_backend.Dto.InternshipDto;
 
 namespace FSTW_backend.Services.Admin
 {
@@ -136,8 +137,6 @@ namespace FSTW_backend.Services.Admin
 
                 SkillsInfo skills = JsonSerializer.Deserialize<SkillsInfo>(infoContent);
 
-                var x = string.Join(", ", skills.Skills.Select(s => s.Skill));
-
                 item.SkillsInfo = skills;
                 if (item.Salary is null)
                     item.Salary = new Salary()
@@ -152,7 +151,7 @@ namespace FSTW_backend.Services.Admin
                     Description = item.Info.Description,
                     Direction = item.ProfessionalRoles[0].Name,
                     Link = item.Link,
-                    RequiredSkills = string.Join(", ", skills.Skills),
+                    RequiredSkills = string.Join(", ", skills.Skills.Select(s => s.Skill)),
                     SalaryFrom = item.Salary.From is null ? 0 : item.Salary.From.Value,
                     SalaryTo = item.Salary.To is null ? 0 : item.Salary.To.Value,
                     Title = item.Name,

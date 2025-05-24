@@ -55,7 +55,7 @@ namespace FSTW_backend.Controllers
         }
 
         [HttpPost("projects/{resumeId}")]
-        public async Task<IActionResult> SendProjects([FromRoute] int resumeId,[FromBody] List<ProjectDto> projectDtos)
+        public async Task<IActionResult> SendProjects([FromRoute] int resumeId, [FromBody] List<ProjectDto> projectDtos)
         {
             var response = await _service.SendProjects(GetUserId(), resumeId, projectDtos);
             if (response.Successed)

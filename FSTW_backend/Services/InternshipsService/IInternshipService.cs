@@ -1,4 +1,4 @@
-﻿using FSTW_backend.Dto;
+﻿using FSTW_backend.Dto.InternshipDto;
 using FSTW_backend.Models;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using AutoMapper;
-using FSTW_backend.Dto;
 using FSTW_backend.Models;
 using FSTW_backend.Repositories;
 using System.Net.Http;
 using System.Text.Json;
 using FSTW_backend.Repositories.Internships;
+using FSTW_backend.Dto.InternshipDto;
 
 namespace FSTW_backend.Services.Internships
 {

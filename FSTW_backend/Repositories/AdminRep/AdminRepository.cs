@@ -31,11 +31,11 @@ namespace FSTW_backend.Repositories.Admin
         public async Task<List<Internship>> GetAllInternships(string filterParam)
         {
             if (filterParam == "archive")
-                return await _context.Internship.Where(i => i.isArchive).ToListAsync();
+                return await _context.Internship.Where(i => i.isArchive).OrderBy(i => i.Id).ToListAsync();
             if (filterParam == "active")
-                return await _context.Internship.Where(i => !i.isArchive).ToListAsync();
+                return await _context.Internship.Where(i => !i.isArchive).OrderBy(i => i.Id).ToListAsync();
             if (filterParam == "all")
-                return await _context.Internship.ToListAsync();
+                return await _context.Internship.OrderBy(i => i.Id).ToListAsync();
             return new List<Internship>();
         }
 

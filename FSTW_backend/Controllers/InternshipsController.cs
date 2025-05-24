@@ -1,11 +1,11 @@
-﻿using FSTW_backend.Dto;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using static System.Net.WebRequestMethods;
 using FSTW_backend.Services.Internships;
+using FSTW_backend.Dto.InternshipDto;
 
 namespace FSTW_backend.Controllers
 {
