@@ -15,7 +15,7 @@ namespace FSTW_backend.Repositories.ResumeRep
 
         public List<Resume> GetAllUserResumes(int userId)
         {
-            return _context.Resume.Where(r => r.UserId == userId).ToList();
+            return _context.Resume.Where(r => r.UserId == userId).OrderBy(r => r.Id).ToList();
         }
 
         public async Task<int> CreateEmptyResume(int userId)
