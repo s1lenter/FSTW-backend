@@ -120,6 +120,56 @@ namespace FSTW_backend.Services.Admin
             var content = await response.Content.ReadAsStringAsync();
             HhResponseData jsonData = JsonSerializer.Deserialize<HhResponseData>(content);
 
+
+            Dictionary<string, List<string>> directions = new Dictionary<string, List<string>>()
+            {
+                { "Архитектура", new List<string>() },
+                { "Финансы и банковское дело", new List<string>() },
+                { "IT и разработка", new List<string>()
+                    {
+                        "DevOps-инженер",
+                        "Программист, разработчик",
+                        "Руководитель группы разработки",
+                        "Сетевой инженер",
+                        "Специалист по информационной безопасности",
+                        "Директор по информационным технологиям (CIO)",
+                        "Технический директор (CTO)",
+                        "Специалист технической поддержки"
+                    }
+                },
+                { "Маркетинг и дизайн", new List<string>()
+                    {
+                        "Арт-директор, креативный директор",
+                        "Гейм-дизайнер",
+                        "Дизайнер, художник"
+                    }
+                },
+                { "Инженерия и производство", new List<string>() },
+                { "Управление и консалтинг", new List<string>()
+                    {
+                        "Менеджер продукта",
+                        "Руководитель проектов",
+                        "Бизнес-аналитик"
+                    }
+                },
+                { "Технические и сервисные специальности", new List<string>()
+                    {
+                        "Специалист технической поддержки"
+                    }
+                },
+                { "Аналитика", new List<string>()
+                    {
+                        "BI-аналитик, аналитик данных",
+                        "Аналитик",
+                        "Бизнес-аналитик",
+                        "Дата-сайентист",
+                        "Продуктовый аналитик",
+                        "Руководитель отдела аналитики",
+                        "Методолог"
+                    }
+                }
+            };
+
             var newInternships = new List<Items>();
             foreach (var vac in jsonData.Items)
             {
@@ -132,6 +182,17 @@ namespace FSTW_backend.Services.Admin
 
             foreach (var item in newInternships)
             {
+                var itemDirection = "";
+                foreach (var key in directions.Keys)
+                {
+                    foreach (var dir in directions[key])
+                        if (item.ProfessionalRoles[0].Name == dir)
+                        {
+                            itemDirection = key;
+                            break;
+                        }
+                }
+
                 var allInfo = await httpClient.GetAsync($"https://api.hh.ru/vacancies/{item.Id}");
                 var infoContent = await allInfo.Content.ReadAsStringAsync();
 
@@ -149,7 +210,7 @@ namespace FSTW_backend.Services.Admin
                 {
                     CompanyName = item.Company.Name,
                     Description = item.Info.Description,
-                    Direction = item.ProfessionalRoles[0].Name,
+                    Direction = itemDirection,
                     Link = item.Link,
                     RequiredSkills = string.Join(", ", skills.Skills.Select(s => s.Skill)),
                     SalaryFrom = item.Salary.From is null ? 0 : item.Salary.From.Value,
