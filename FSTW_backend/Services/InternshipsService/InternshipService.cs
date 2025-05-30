@@ -73,6 +73,29 @@ namespace FSTW_backend.Services.Internships
             return ResponseResult<int>.Success(await _repository.DeleteFavoriteInternship(fav));
         }
 
+        public async Task<ResponseResult<List<InternshipDto>>> GetPersonalInterships(int userId)
+        {
+            var internships = await _repository.GetInternships();
+            var profile = await _repository.GetUserProfile(userId);
+            var skills = profile.Skills.ToLower().Split(',').Select(s => s.Trim());
+            var result = internships
+                            .Select(i => new
+                            {
+                                Internship = i,
+                                MatchingSkills = i.RequiredSkills
+                                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(s => s.Trim().ToLower())
+                                    .Intersect(skills)
+                                    .ToList()
+                            })
+                            .Where(x => x.MatchingSkills.Any())
+                            .OrderByDescending(x => x.MatchingSkills.Count)
+                            .Select(x => x.Internship)
+                            .ToList();
+            var personalInternshipDtos = MapLists<Internship, InternshipDto>(result);
+            return ResponseResult<List<InternshipDto>>.Success(personalInternshipDtos);
+        }
+
         private List<TResult> MapLists<TSource, TResult>(List<TSource> sourceList)
             where TResult : new()
         {

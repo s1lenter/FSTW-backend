@@ -1,6 +1,7 @@
 ﻿using FSTW_backend.Dto.InternshipDto;
 using FSTW_backend.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FSTW_backend.Repositories.Internships
 {
@@ -27,6 +28,10 @@ namespace FSTW_backend.Repositories.Internships
                 query = query.Where(i => i.Direction == filters.Direction);
 
             return await query.ToListAsync();
+        }
+        public async Task<List<Internship>> GetInternships()
+        {
+            return await _context.Internship.ToListAsync();
         }
 
         public async Task<List<Favorite>> GetFavorites(int userId)
@@ -66,6 +71,11 @@ namespace FSTW_backend.Repositories.Internships
         public async Task<Internship> GetInternship(int internshipId)
         {
             return await _context.Internship.FirstOrDefaultAsync(i => i.Id == internshipId);
+        }
+
+        public async Task<Profile> GetUserProfile(int userId)
+        {
+            return await _context.Profile.FirstOrDefaultAsync(p => p.UserId == userId);
         }
     }
 }

@@ -56,6 +56,15 @@ namespace FSTW_backend.Controllers
             return BadRequest(response.Errors);
         }
 
+        [HttpGet("personal")]
+        public async Task<IActionResult> GetPersonalInternships()
+        {
+            var response = await _service.GetPersonalInterships(GetUserId());
+            if (response.Successed)
+                return Ok(response.Value);
+            return BadRequest(response.Errors);
+        }
+
         private int GetUserId()
         {
             return int.Parse(HttpContext.User.Claims.FirstOrDefault(c =>

@@ -13,5 +13,7 @@ namespace FSTW_backend.Services.Internships
         public Task<ResponseResult<Favorite>> AddFavoriteInternship(int userId, int internshipId);
 
         public Task<ResponseResult<int>> RemoveFavoriteInternship(int userId, int internshipId);
+
+        public Task<ResponseResult<List<InternshipDto>>> GetPersonalInterships(int userId);
     }
 }
