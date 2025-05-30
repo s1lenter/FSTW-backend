@@ -21,7 +21,14 @@ namespace FSTW_backend.Controllers
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        [HttpPost("/resume_chat/send/{resumeId}")]
+        [HttpGet("resume_chat/history/{count}/{page}")]
+        public async Task<IActionResult> GetChatHistory([FromRoute] int count, [FromRoute] int page)
+        {
+            var response = await _service.GetChatHistory(GetUserId(), count, page);
+            return Ok(response.Value);
+        }
+
+        [HttpPost("resume_chat/send/{resumeId}")]
         public async Task<IActionResult> SendQuestion([FromServices] IResumeEditorService resumeEditorService, [FromBody] string question, [FromRoute] int resumeId)
         {
             var resumeResponse = await resumeEditorService.GetOnlyResumeInfo(GetUserId(), resumeId);
@@ -33,13 +40,20 @@ namespace FSTW_backend.Controllers
             return Ok(response.Value);
         }
 
-        [HttpPost("/default_chat/send")]
+        [HttpPost("default_chat/send")]
         public async Task<IActionResult> SendQuestion([FromBody] string question)
         {
             var response = await _service.GetDefaultAnswer(GetUserId(), question, _httpClient);
             if (!response.Successed)
                 return BadRequest(response.Errors);
             return Ok(response.Value);
+        }
+
+        [HttpPost("fill_db/{count}")]
+        public async Task<IActionResult> FillDataBase([FromBody] string text, [FromRoute] int count)
+        {
+            await _service.FillDb(text, count, GetUserId());
+            return Ok();
         }
 
         private int GetUserId()

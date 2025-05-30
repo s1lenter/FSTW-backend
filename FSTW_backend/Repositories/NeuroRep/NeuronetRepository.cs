@@ -1,4 +1,5 @@
-﻿using FSTW_backend.Models;
+﻿using FSTW_backend.Dto;
+using FSTW_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using EntityFrameworkQueryableExtensions = Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions;
 
@@ -42,6 +43,45 @@ namespace FSTW_backend.Repositories.Neuro
         public async Task<List<HelperChatHistory>> GetDefaultPrevMessages(int userId)
         {
             return await _context.HelperChatHistory.Where(h => h.UserId == userId).Take(10).ToListAsync();
+        }
+
+        public async Task<List<NeuronetDto>> GetMessagesHistory(int userId, int count, int page)
+        {
+            var x = await _context.HelperChatHistory
+                .Where(h => h.UserId == userId)
+                .OrderByDescending(h => h.Id)
+                .Skip(count * (page - 1))
+                .Take(count)
+                .ToListAsync();
+            var dtosList = new List<NeuronetDto>();
+
+            foreach (var duo in x)
+            {
+                var dto = new NeuronetDto()
+                {
+                    UserMessage = duo.Message,
+                    BotMessage = duo.Answer
+                };
+                dtosList.Add(dto);
+            }
+            return dtosList;
+        }
+
+        public async Task FillDb(string text, int count, int userId)
+        {
+            var rnd = new Random();
+            for (int i = 0; i < count; i++)
+            {
+                var entity = new HelperChatHistory()
+                {
+                    UserId = rnd.Next(26,34),
+                    //UserId = userId,
+                    Message = text,
+                    Answer = text,
+                };
+                await _context.HelperChatHistory.AddAsync(entity);
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }

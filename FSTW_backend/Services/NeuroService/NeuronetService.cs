@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using FSTW_backend.Dto;
 using FSTW_backend.Dto.ResumeDto;
 using FSTW_backend.Models;
 using FSTW_backend.Repositories;
@@ -130,6 +131,17 @@ namespace FSTW_backend.Services.Neuro
             var response = await aiService.SendRequest(question, context);
             await _neuroRepository.AddDefaultMessage(question, response, userId);
             return ResponseResult<string>.Success(response);
+        }
+
+        public async Task<ResponseResult<List<NeuronetDto>>> GetChatHistory(int userId, int count, int page)
+        {
+            var history = await _neuroRepository.GetMessagesHistory(userId, count, page);
+            return ResponseResult<List<NeuronetDto>>.Success(history);
+        }
+
+        public async Task FillDb(string message, int count, int userid)
+        {
+            await _neuroRepository.FillDb(message, count, userid);
         }
 
         //private async Task AddDefaultPrevMessages(Func<Task<List<HelperChatHistory>>> prevMessageFunc)
