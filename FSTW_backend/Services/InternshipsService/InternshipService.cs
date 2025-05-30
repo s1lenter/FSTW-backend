@@ -19,10 +19,18 @@ namespace FSTW_backend.Services.Internships
             _repository = new InternshipRepository(context);
         }
 
-        public async Task<ResponseResult<List<InternshipDto>>> GetInternships(InternshipFiltersDto filters)
+        public async Task<ResponseResult<List<InternshipDto>>> GetInternships(InternshipFiltersDto filters, int userId)
         {
+            var favorites = await _repository.GetFavorites(userId);
             var internships = await _repository.GetInternships(filters);
             var internshipDtos = MapLists<Internship, InternshipDto>(internships);
+
+            foreach (var internshipDto in internshipDtos)
+            {
+                if (favorites.Any(f => f.InternshipId == internshipDto.Id))
+                    internshipDto.IsFavorite = true;
+            }
+
             return ResponseResult<List<InternshipDto>>.Success(internshipDtos);
         }
 
@@ -75,6 +83,7 @@ namespace FSTW_backend.Services.Internships
 
         public async Task<ResponseResult<List<InternshipDto>>> GetPersonalInterships(int userId)
         {
+            var favorites = await _repository.GetFavorites(userId);
             var internships = await _repository.GetInternships();
             var profile = await _repository.GetUserProfile(userId);
             var skills = profile.Skills.ToLower().Split(',').Select(s => s.Trim());
@@ -93,6 +102,13 @@ namespace FSTW_backend.Services.Internships
                             .Select(x => x.Internship)
                             .ToList();
             var personalInternshipDtos = MapLists<Internship, InternshipDto>(result);
+
+            foreach (var internshipDto in personalInternshipDtos)
+            {
+                if (favorites.Any(f => f.InternshipId == internshipDto.Id))
+                    internshipDto.IsFavorite = true;
+            }
+
             return ResponseResult<List<InternshipDto>>.Success(personalInternshipDtos);
         }
 

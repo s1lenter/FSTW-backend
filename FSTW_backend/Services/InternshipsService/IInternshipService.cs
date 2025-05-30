@@ -6,7 +6,7 @@ namespace FSTW_backend.Services.Internships
 {
     public interface IInternshipService
     {
-        public Task<ResponseResult<List<InternshipDto>>> GetInternships(InternshipFiltersDto filters);
+        public Task<ResponseResult<List<InternshipDto>>> GetInternships(InternshipFiltersDto filters, int userId);
 
         public Task<ResponseResult<List<InternshipDto>>> GetFavoriteInternships(int userId);
 

@@ -25,7 +25,7 @@ namespace FSTW_backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetInternships([FromQuery] InternshipFiltersDto filters)
         {
-            var response = await _service.GetInternships(filters);
+            var response = await _service.GetInternships(filters, GetUserId());
             return Ok(response.Value);
         }
 

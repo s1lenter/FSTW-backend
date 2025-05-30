@@ -20,12 +20,13 @@ namespace FSTW_backend.Dto.InternshipDto
             {
 
                 if (SalaryFrom == 0 && SalaryTo == 0)
-                    return "Зарплата указана";
-                return "Зарпалата не указана";
+                    return "Зарплата не указана";
+                return "Зарплата указана";
             }
         }
         public string Direction { get; set; }
         public string Link { get; set; }
         public bool IsArchive { get; set; }
+        public bool IsFavorite { get; set; }
     }
 }
