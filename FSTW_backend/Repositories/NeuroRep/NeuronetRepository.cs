@@ -45,7 +45,7 @@ namespace FSTW_backend.Repositories.Neuro
             return await _context.HelperChatHistory.Where(h => h.UserId == userId).Take(10).ToListAsync();
         }
 
-        public async Task<List<NeuronetDto>> GetMessagesHistory(int userId, int count, int page)
+        public async Task<List<NeuronetDto>> GetMessagesDefaultHistory(int userId, int count, int page)
         {
             var x = await _context.HelperChatHistory
                 .Where(h => h.UserId == userId)

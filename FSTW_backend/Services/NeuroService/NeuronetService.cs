@@ -133,9 +133,9 @@ namespace FSTW_backend.Services.Neuro
             return ResponseResult<string>.Success(response);
         }
 
-        public async Task<ResponseResult<List<NeuronetDto>>> GetChatHistory(int userId, int count, int page)
+        public async Task<ResponseResult<List<NeuronetDto>>> GetDefaultChatHistory(int userId, int count, int page)
         {
-            var history = await _neuroRepository.GetMessagesHistory(userId, count, page);
+            var history = await _neuroRepository.GetMessagesDefaultHistory(userId, count, page);
             return ResponseResult<List<NeuronetDto>>.Success(history);
         }
 

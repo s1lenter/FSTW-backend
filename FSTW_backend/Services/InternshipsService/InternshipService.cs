@@ -39,6 +39,8 @@ namespace FSTW_backend.Services.Internships
             var favorites = await _repository.GetFavorites(userId);
             var favInternships = await _repository.GetFavoriteInternships(favorites);
             var favInternshipDtos = MapLists<Internship, InternshipDto>(favInternships);
+            foreach (var dto in favInternshipDtos)
+                dto.IsFavorite = true;
             return ResponseResult<List<InternshipDto>>.Success(favInternshipDtos);
         }
 

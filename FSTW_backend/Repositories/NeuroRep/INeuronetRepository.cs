@@ -14,7 +14,7 @@ namespace FSTW_backend.Repositories.Neuro
 
         public Task<List<HelperChatHistory>> GetDefaultPrevMessages(int userId);
 
-        public Task<List<NeuronetDto>> GetMessagesHistory(int userId, int count, int page);
+        public Task<List<NeuronetDto>> GetMessagesDefaultHistory(int userId, int count, int page);
 
         public Task FillDb(string text, int count, int userId);
     }

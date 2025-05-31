@@ -190,7 +190,8 @@ namespace FSTW_backend.Pdf
                                         mainColumn.Item().PaddingLeft(15).PaddingBottom(10).Text(text =>
                                         {
                                             text.Span("Сслыка: ").SemiBold();
-                                            text.Span($"{proj.Link}").FontColor(Colors.Blue.Accent4);
+                                            text.Hyperlink($"{proj.Link}", $"{proj.Link}")
+                                            .FontColor(Colors.Blue.Accent4);
                                         });
                                     }
 

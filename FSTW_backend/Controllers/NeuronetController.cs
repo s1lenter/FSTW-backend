@@ -24,12 +24,12 @@ namespace FSTW_backend.Controllers
         [HttpGet("resume_chat/history/{count}/{page}")]
         public async Task<IActionResult> GetChatHistory([FromRoute] int count, [FromRoute] int page)
         {
-            var response = await _service.GetChatHistory(GetUserId(), count, page);
+            var response = await _service.GetDefaultChatHistory(GetUserId(), count, page);
             return Ok(response.Value);
         }
 
         [HttpPost("resume_chat/send/{resumeId}")]
-        public async Task<IActionResult> SendQuestion([FromServices] IResumeEditorService resumeEditorService, [FromBody] string question, [FromRoute] int resumeId)
+        public async Task<IActionResult> SendResumeQuestion([FromServices] IResumeEditorService resumeEditorService, [FromBody] string question, [FromRoute] int resumeId)
         {
             var resumeResponse = await resumeEditorService.GetOnlyResumeInfo(GetUserId(), resumeId);
             if (!resumeResponse.Successed)
