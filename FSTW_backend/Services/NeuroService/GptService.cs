@@ -18,7 +18,7 @@ namespace FSTW_backend.Services.Neuro
             var jsonContent = JsonContent.Create(contextList);
 
             //var response = await _httpClient.PostAsync("http://neuro:5000/api/hello", jsonContent);
-            var response = await _httpClient.PostAsync("http://10.13.78.5:5000/api/hello", jsonContent);
+            var response = await _httpClient.PostAsync("http://10.13.76.142:5000", jsonContent);
             if (!response.IsSuccessStatusCode)
                 return null;
             var content = await response.Content.ReadAsStringAsync();

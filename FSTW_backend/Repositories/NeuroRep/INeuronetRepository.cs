@@ -16,6 +16,8 @@ namespace FSTW_backend.Repositories.Neuro
 
         public Task<List<NeuronetDto>> GetMessagesDefaultHistory(int userId, int count, int page);
 
+        public Task<List<NeuronetDto>> GetMessagesResumeHistory(int userId, int count, int page);
+
         public Task FillDb(string text, int count, int userId);
     }
 }

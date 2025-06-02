@@ -67,6 +67,28 @@ namespace FSTW_backend.Repositories.Neuro
             return dtosList;
         }
 
+        public async Task<List<NeuronetDto>> GetMessagesResumeHistory(int userId, int count, int page)
+        {
+            var x = await _context.ChatHistory
+                .Where(h => h.UserId == userId)
+                .OrderByDescending(h => h.Id)
+                .Skip(count * (page - 1))
+                .Take(count)
+                .ToListAsync();
+            var dtosList = new List<NeuronetDto>();
+
+            foreach (var duo in x)
+            {
+                var dto = new NeuronetDto()
+                {
+                    UserMessage = duo.Message,
+                    BotMessage = duo.Answer
+                };
+                dtosList.Add(dto);
+            }
+            return dtosList;
+        }
+
         public async Task FillDb(string text, int count, int userId)
         {
             var rnd = new Random();

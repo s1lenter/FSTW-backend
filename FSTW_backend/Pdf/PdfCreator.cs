@@ -79,7 +79,7 @@ namespace FSTW_backend.Pdf
                                                 .SemiBold();
                                             column.Item()
                                                 .PaddingBottom(3)
-                                                .Text($"{resumeInfo.Telegram}").FontColor(Colors.Blue.Accent4);
+                                                .Text($"{resumeInfo.Telegram}");
                                         }
 
                                         if (resumeInfo.Vk != "Не указано" && resumeInfo.Vk != "" && resumeInfo.Vk != "-")

@@ -11,6 +11,8 @@ namespace FSTW_backend.Services.Neuro
 
         public Task<ResponseResult<List<NeuronetDto>>> GetDefaultChatHistory(int userId, int count, int page);
 
+        public Task<ResponseResult<List<NeuronetDto>>> GetResumeChatHistory(int userId, int count, int page);
+
         public Task FillDb(string message, int count, int userId);
     }
 }

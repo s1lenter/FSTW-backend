@@ -121,6 +121,7 @@ namespace FSTW_backend.Services.Neuro
                 "если тебя спрашивают что можно изучить, то старайся сразу давать ресурсы, ссылки, курсы, книги, чтобы пользователю было легче начать обучение");
             promtInfo.AppendLine(
                 "также ты должен помогать для подготовки к собеседованиям, предоставить возможность проверки зананий пользователя в той сфере, на которую он ориентируется");
+            promtInfo.AppendLine("если тебя спрашивают о чем-то не связанным с it и работой, то говори что на такие вопросы ты не отвечаешь");
 
             context.Add(new Dictionary<string, string>()
             {
@@ -134,6 +135,12 @@ namespace FSTW_backend.Services.Neuro
         }
 
         public async Task<ResponseResult<List<NeuronetDto>>> GetDefaultChatHistory(int userId, int count, int page)
+        {
+            var history = await _neuroRepository.GetMessagesDefaultHistory(userId, count, page);
+            return ResponseResult<List<NeuronetDto>>.Success(history);
+        }
+
+        public async Task<ResponseResult<List<NeuronetDto>>> GetResumeChatHistory(int userId, int count, int page)
         {
             var history = await _neuroRepository.GetMessagesDefaultHistory(userId, count, page);
             return ResponseResult<List<NeuronetDto>>.Success(history);

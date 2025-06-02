@@ -99,5 +99,13 @@ namespace FSTW_backend.Controllers
             await _service.AddVacanciesFromHh(_httpClient);
             return Ok();
         }
+
+        [HttpGet("parsing")]
+        public async Task<IActionResult> ParseSites()
+        {
+            var response = await _httpClient.GetAsync("https://kontur.ru/education/programs/intern/backendall");
+            var content = await response.Content.ReadAsStringAsync();
+            return Ok(content);
+        }
     }
 }

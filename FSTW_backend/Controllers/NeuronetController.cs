@@ -21,10 +21,17 @@ namespace FSTW_backend.Controllers
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        [HttpGet("resume_chat/history/{count}/{page}")]
-        public async Task<IActionResult> GetChatHistory([FromRoute] int count, [FromRoute] int page)
+        [HttpGet("default_chat/history/{count}/{page}")]
+        public async Task<IActionResult> GetDefaultChatHistory([FromRoute] int count, [FromRoute] int page)
         {
             var response = await _service.GetDefaultChatHistory(GetUserId(), count, page);
+            return Ok(response.Value);
+        }
+
+        [HttpGet("resume_chat/history/{count}/{page}")]
+        public async Task<IActionResult> GetResumeChatHistory([FromRoute] int count, [FromRoute] int page)
+        {
+            var response = await _service.GetResumeChatHistory(GetUserId(), count, page);
             return Ok(response.Value);
         }
 
