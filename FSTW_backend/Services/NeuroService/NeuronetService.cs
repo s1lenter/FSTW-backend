@@ -35,23 +35,19 @@ namespace FSTW_backend.Services.Neuro
                 });
             }
 
-            context.Add(new Dictionary<string, string>()
-            {
-                ["role"] = "user",
-                ["content"] = $"{question}"
-            });
-
             var promtInfo = new StringBuilder();
             promtInfo.AppendLine(
-                "ты должен помогать пользователю(начинающему it-специалисту студенту) с созданием резюме и его редактированием для поиска первой стажировки-работы.");
-            promtInfo.AppendLine(" у резюме строгая структура, так как используется конструктор.");
+                "Ты должен помогать пользователю(начинающему it-специалисту студенту) с созданием резюме и его редактированием для поиска первой стажировки или работы.");
+            promtInfo.AppendLine("Ты должен отвечать только на русском языке.");
+            promtInfo.AppendLine("У резюме строгая структура, так как используется конструктор.");
             promtInfo.AppendLine(
-                "структура такая: информация о себе, хобби, навыки, проекты, опыт, достижения, образование и личная информация");
+                "Структура такая: информация о себе, хобби, навыки, проекты, опыт, достижения, образование и личная информация.");
             promtInfo.AppendLine("вот те данные, которые пользователь уже написал:");
-            promtInfo.AppendLine($"опыт: {resumeInfoDto.Experience}");
-            promtInfo.AppendLine($"о себе: {resumeInfoDto.About}");
-            promtInfo.AppendLine($"хобби: {resumeInfoDto.Hobbies}");
-            promtInfo.AppendLine($"навыки: {resumeInfoDto.Skills}");
+            promtInfo.AppendLine("личные данные тебе не отправляются, потому что их не нужно никак редактировать");
+            promtInfo.AppendLine($"Опыт: {resumeInfoDto.Experience}");
+            promtInfo.AppendLine($"О себе: {resumeInfoDto.About}");
+            promtInfo.AppendLine($"Хобби: {resumeInfoDto.Hobbies}");
+            promtInfo.AppendLine($"Навыки: {resumeInfoDto.Skills}");
 
 
             for (int i = 0; i < resumeInfoDto.Projects.Count; i++)
@@ -75,8 +71,10 @@ namespace FSTW_backend.Services.Neuro
                 promtInfo.AppendLine(resumeInfoDto.Achievements[i].Description);
             }
 
-            promtInfo.AppendLine("ты должен помочь с описанием проектов, достижениями, с блоками информации о себе, задать наводящие вопросы и так далее");
-            promtInfo.AppendLine("не повторяй то, что у пользователя хорошая структура резюме, помогай ему с тем вопросом, который он тебе пишет");
+            promtInfo.AppendLine("Ты должен помочь с описанием проектов, достижениями, с блоками информации о себе, задать наводящие вопросы, дать подсказки по улучшению на основе того, что хотят видеть работодаели и hr-специалисты.");
+            promtInfo.AppendLine("Обязательно обращай внимение на то, что именно тебя спрашивает или просит пользователь, помогай ему с его вопросом");
+            promtInfo.AppendLine("Если тебя спрашивают о чем-то не связанном с резюме, it и работой, то говори что на такие вопросы ты не отвечаешь");
+            promtInfo.AppendLine("");
 
             context.Add(new Dictionary<string, string>()
             {
@@ -84,8 +82,18 @@ namespace FSTW_backend.Services.Neuro
                 ["content"] = promtInfo.ToString()
             });
 
+            context.Add(new Dictionary<string, string>()
+            {
+                ["role"] = "user",
+                ["content"] = $"{question}"
+            });
+
             var response = await aiService.SendRequest(question, context);
-            await _neuroRepository.AddResumeMessage(userId, resumeId, question, response);
+
+            if (response is null)
+                response = "Сервер не отвечает, попробуйте позже";
+            else
+                await _neuroRepository.AddResumeMessage(userId, resumeId, question, response);
             return ResponseResult<string>.Success(response);
         }
 
@@ -109,19 +117,15 @@ namespace FSTW_backend.Services.Neuro
                 });
             }
 
-            context.Add(new Dictionary<string, string>()
-            {
-                ["role"] = "user",
-                ["content"] = $"{question}"
-            });
             var promtInfo = new StringBuilder();
             promtInfo.AppendLine(
-                "ты должен помогать пользователю(начинающему it-специалисту студенту) с вопросам касательно первой работы, стажировки, как попасть в it и что для этого делать, что изучать");
+                "Ты должен помогать пользователю(начинающему it-специалисту студенту) с вопросам касательно первой работы, стажировки, как попасть в it и что для этого делать, что изучать.");
+            promtInfo.AppendLine("Ты должен отвечать только на русском языке.");
             promtInfo.AppendLine(
-                "если тебя спрашивают что можно изучить, то старайся сразу давать ресурсы, ссылки, курсы, книги, чтобы пользователю было легче начать обучение");
+                "Если тебя спрашивают что можно изучить, то старайся сразу давать ресурсы, ссылки, курсы, книги, чтобы пользователю было легче начать обучение.");
             promtInfo.AppendLine(
-                "также ты должен помогать для подготовки к собеседованиям, предоставить возможность проверки зананий пользователя в той сфере, на которую он ориентируется");
-            promtInfo.AppendLine("если тебя спрашивают о чем-то не связанным с it и работой, то говори что на такие вопросы ты не отвечаешь");
+                "Также ты должен помогать для подготовки к собеседованиям, предоставить возможность проверки зананий пользователя в той сфере, на которую он ориентируется.");
+            promtInfo.AppendLine("Если тебя спрашивают о чем-то не связанном с it и работой, то говори что на такие вопросы ты не отвечаешь.");
 
             context.Add(new Dictionary<string, string>()
             {
@@ -129,8 +133,19 @@ namespace FSTW_backend.Services.Neuro
                 ["content"] = promtInfo.ToString()
             });
 
+            context.Add(new Dictionary<string, string>()
+            {
+                ["role"] = "user",
+                ["content"] = $"{question}"
+            });
+
             var response = await aiService.SendRequest(question, context);
-            await _neuroRepository.AddDefaultMessage(question, response, userId);
+
+            if (response is null)
+                response = "Сервер не отвечает, попробуйте позже";
+            else
+                await _neuroRepository.AddDefaultMessage(question, response, userId);
+
             return ResponseResult<string>.Success(response);
         }
 
@@ -142,7 +157,7 @@ namespace FSTW_backend.Services.Neuro
 
         public async Task<ResponseResult<List<NeuronetDto>>> GetResumeChatHistory(int userId, int count, int page)
         {
-            var history = await _neuroRepository.GetMessagesDefaultHistory(userId, count, page);
+            var history = await _neuroRepository.GetMessagesResumeHistory(userId, count, page);
             return ResponseResult<List<NeuronetDto>>.Success(history);
         }
 
@@ -151,9 +166,5 @@ namespace FSTW_backend.Services.Neuro
             await _neuroRepository.FillDb(message, count, userid);
         }
 
-        //private async Task AddDefaultPrevMessages(Func<Task<List<HelperChatHistory>>> prevMessageFunc)
-        //{
-        //    var prevMessages = await prevMessageFunc.Invoke();
-        //}
     }
 }
