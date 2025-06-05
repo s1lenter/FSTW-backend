@@ -2,6 +2,12 @@
 using FSTW_backend.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium;
+using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager;
+using FSTW_backend.Services;
+using FSTW_backend.Services.SitesParsingServices;
 
 namespace FSTW_backend.Controllers
 {
@@ -11,11 +17,13 @@ namespace FSTW_backend.Controllers
     public class AdminPanelController : ControllerBase
     {
         private IAdminService _service;
+        private IAlfaParsingService _alfaParsingService;
         private HttpClient _httpClient;
-        public AdminPanelController(IAdminService service, IHttpClientFactory factory)
+        public AdminPanelController(IAdminService service, IHttpClientFactory factory, IAlfaParsingService alfaParsingService)
         {
             _service = service;
             _httpClient = factory.CreateClient();
+            _alfaParsingService = alfaParsingService;
         }
 
         [HttpPost("create/multiply")]
@@ -103,9 +111,10 @@ namespace FSTW_backend.Controllers
         [HttpGet("parsing")]
         public async Task<IActionResult> ParseSites()
         {
-            var response = await _httpClient.GetAsync("https://kontur.ru/education/programs/intern/backendall");
-            var content = await response.Content.ReadAsStringAsync();
-            return Ok(content);
+            //var response = SitesParser.Parse();
+            //return Ok(response);
+            await _alfaParsingService.GetAlfaData(_httpClient);
+            return Ok();
         }
     }
 }

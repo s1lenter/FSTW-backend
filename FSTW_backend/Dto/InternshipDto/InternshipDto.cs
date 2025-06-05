@@ -10,10 +10,13 @@ namespace FSTW_backend.Dto.InternshipDto
         public string Description { get; set; }
         public string RequiredSkills { get; set; }
         public string WorkFormat { get; set; }
+
         [JsonIgnore]
         public int SalaryFrom { get; set; }
+
         [JsonIgnore]
         public int SalaryTo { get; set; }
+
         public string SetSalary
         {
             get

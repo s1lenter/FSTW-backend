@@ -12,6 +12,7 @@ using FSTW_backend.Services.ResumeService;
 using FSTW_backend.Services.Admin;
 using FSTW_backend.Services.Neuro;
 using FSTW_backend.Services.Internships;
+using FSTW_backend.Services.SitesParsingServices;
 
 namespace FSTW_backend
 {
@@ -77,6 +78,8 @@ namespace FSTW_backend
             builder.Services.AddScoped<INeuronetService, NeuronetService>();
 
             builder.Services.AddScoped<IInternshipService, InternshipService>();
+
+            builder.Services.AddScoped<IAlfaParsingService, AlfaParsingService>();
 
             builder.Services.AddHttpClient("hh.ru")
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
