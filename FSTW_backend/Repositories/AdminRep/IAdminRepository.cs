@@ -23,5 +23,13 @@ namespace FSTW_backend.Repositories.Admin
         public Task AddVacanciesFromHh(List<Internship> internships);
 
         public Task<Internship> GetHhInternship(string intershipsId);
+        
+        public Task<List<Internship>> GetInternshipsByCompany(string name);
+
+        public Task<List<Internship>> GetHhInterships();
+
+        public Task DeleteOldInternships(List<Internship> internships);
+
+        public Task SaveChanges();
     }
 }

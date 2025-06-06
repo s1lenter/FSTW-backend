@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using FSTW_backend.Dto.InternshipDto;
+using System.Net.Http;
 
 namespace FSTW_backend.Services.Admin
 {
@@ -120,6 +121,10 @@ namespace FSTW_backend.Services.Admin
             var content = await response.Content.ReadAsStringAsync();
             HhResponseData jsonData = JsonSerializer.Deserialize<HhResponseData>(content);
 
+            var currInternships = await _repository.GetHhInterships();
+
+            await DeleteOldInternships(jsonData, currInternships);
+
             var newInternships = new List<Items>();
             foreach (var vac in jsonData.Items)
             {
@@ -128,8 +133,35 @@ namespace FSTW_backend.Services.Admin
                     newInternships.Add(vac);
             }
 
-            var directions = InternshipCategory.Categories;
+            await _repository.AddVacanciesFromHh(await CreateNewInterships(httpClient, newInternships));
+        }
 
+        private async Task DeleteOldInternships(HhResponseData jsonData, List<Internship> currInternships)
+        {
+            var newIds = jsonData.Items.Select(i => i.Id);
+            var delList = new List<Internship>();
+
+            foreach (var internship in currInternships)
+            {
+                var isActual = false;
+                foreach (var id in newIds)
+                {
+                    if (id == internship.IdFromHh)
+                    {
+                        isActual = true;
+                        break;
+                    }
+                }
+                if (!isActual)
+                    delList.Add(internship);
+            }
+
+            if (delList.Count > 0)
+                await _repository.DeleteOldInternships(delList);
+        }
+
+        private async Task<List<Internship>> CreateNewInterships(HttpClient httpClient, List<Items> newInternships)
+        {
             var internshipsList = new List<Internship>();
 
             foreach (var item in newInternships)
@@ -163,8 +195,7 @@ namespace FSTW_backend.Services.Admin
                     IdFromHh = item.Id
                 });
             }
-
-            await _repository.AddVacanciesFromHh(internshipsList);
+            return internshipsList;
         }
     }
 }

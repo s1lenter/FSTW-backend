@@ -18,12 +18,14 @@ namespace FSTW_backend.Controllers
     {
         private IAdminService _service;
         private IAlfaParsingService _alfaParsingService;
+        private IKonturParsingService _konturParsingService;
         private HttpClient _httpClient;
-        public AdminPanelController(IAdminService service, IHttpClientFactory factory, IAlfaParsingService alfaParsingService)
+        public AdminPanelController(IAdminService service, IHttpClientFactory factory, IAlfaParsingService alfaParsingService, IKonturParsingService konturParseService)
         {
             _service = service;
             _httpClient = factory.CreateClient();
             _alfaParsingService = alfaParsingService;
+            _konturParsingService = konturParseService;
         }
 
         [HttpPost("create/multiply")]
@@ -111,9 +113,14 @@ namespace FSTW_backend.Controllers
         [HttpGet("parsing")]
         public async Task<IActionResult> ParseSites()
         {
-            //var response = SitesParser.Parse();
-            //return Ok(response);
             await _alfaParsingService.GetAlfaData(_httpClient);
+            return Ok();
+        }
+
+        [HttpGet("kontur")]
+        public async Task<IActionResult> ParseKontur()
+        {
+            await _konturParsingService.Parse();
             return Ok();
         }
     }

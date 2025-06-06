@@ -19,7 +19,7 @@ namespace FSTW_backend.Services.SitesParsingServices
         {
             _repository = new AdminRepository(context);
         }
-
+        
         public async Task GetAlfaData(HttpClient httpClient)
         {
             var response = await httpClient.GetAsync("https://alfabank.ru/api/v1/alfastudents-internships/internships?cityId.in%5B0%5D=275&directionId.in%5B0%5D=1&directionId.in%5B10%5D=25&directionId.in%5B11%5D=26&directionId.in%5B12%5D=27&directionId.in%5B13%5D=28&directionId.in%5B14%5D=31&directionId.in%5B1%5D=3&directionId.in%5B2%5D=5&directionId.in%5B3%5D=11&directionId.in%5B4%5D=14&directionId.in%5B5%5D=16&directionId.in%5B6%5D=17&directionId.in%5B7%5D=21&directionId.in%5B8%5D=23&directionId.in%5B9%5D=24&limit=40&offset=0&sort=updatedAt%3Aasc");
@@ -28,10 +28,48 @@ namespace FSTW_backend.Services.SitesParsingServices
 
             var json = JsonSerializer.Deserialize<AlfaData>(content);
 
+            await _repository.AddVacanciesFromHh(await CreateInternships(httpClient, json));
+        }
+
+        private async Task DeleteOldInternships(AlfaData jsonData, List<Internship> currInternships)
+        {
+            var newIds = jsonData.Data.Select(i => i.ExternalId);
+            var delList = new List<Internship>();
+
+            foreach (var internship in currInternships)
+            {
+                var isActual = false;
+                foreach (var id in newIds)
+                {
+                    if (id.ToString() == internship.IdFromHh)
+                    {
+                        isActual = true;
+                        break;
+                    }
+                }
+                if (!isActual)
+                    delList.Add(internship);
+            }
+
+            if (delList.Count > 0)
+                await _repository.DeleteOldInternships(delList);
+        }
+
+        private async Task<List<Internship>> CreateInternships(HttpClient httpClient, AlfaData json)
+        {
+            var currInternships = await _repository.GetInternshipsByCompany("Альфа Банк");
+            await DeleteOldInternships(json, currInternships);
+
+            var newInternships = new List<AlfaInternship>();
+            foreach (var vac in json.Data)
+            {
+                var internship = await _repository.GetHhInternship(vac.ExternalId.ToString());
+                if (internship is null)
+                    newInternships.Add(vac);
+            }
+
             var result = new List<Internship>();
-
-
-            foreach (var internship in json.Data)
+            foreach (var internship in newInternships)
             {
                 var direction = InternshipCategory.FindCategory(internship.Direction.Name);
                 await SetRequirementsString(httpClient, internship);
@@ -49,8 +87,7 @@ namespace FSTW_backend.Services.SitesParsingServices
                     IdFromHh = internship.ExternalId.ToString(),
                 });
             }
-
-            await _repository.AddVacanciesFromHh(result);
+            return result;
         }
 
         private async Task SetRequirementsString(HttpClient httpClient, AlfaInternship internship)

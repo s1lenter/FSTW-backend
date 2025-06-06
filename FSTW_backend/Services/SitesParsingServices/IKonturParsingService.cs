@@ -1,7 +1,7 @@
 ﻿namespace FSTW_backend.Services.SitesParsingServices
 {
-    public interface ISiteParsingService
+    public interface IKonturParsingService
     {
-        //public 
+        public Task Parse();
     }
 }

@@ -81,6 +81,8 @@ namespace FSTW_backend
 
             builder.Services.AddScoped<IAlfaParsingService, AlfaParsingService>();
 
+            builder.Services.AddScoped<IKonturParsingService, KonturParsingService>();
+
             builder.Services.AddHttpClient("hh.ru")
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
                 {
