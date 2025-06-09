@@ -4,6 +4,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 using FSTW_backend.Services.ResumeService;
 using FSTW_backend.Services.Neuro;
+using System.Threading.Tasks;
 
 namespace FSTW_backend.Controllers
 {
@@ -28,10 +29,10 @@ namespace FSTW_backend.Controllers
             return Ok(response.Value);
         }
 
-        [HttpGet("resume_chat/history/{count}/{page}")]
-        public async Task<IActionResult> GetResumeChatHistory([FromRoute] int count, [FromRoute] int page)
+        [HttpGet("resume_chat/{resumeId}/history/{count}/{page}")]
+        public async Task<IActionResult> GetResumeChatHistory([FromRoute] int resumeId, [FromRoute] int count, [FromRoute] int page)
         {
-            var response = await _service.GetResumeChatHistory(GetUserId(), count, page);
+            var response = await _service.GetResumeChatHistory(GetUserId(), resumeId, count, page);
             return Ok(response.Value);
         }
 
@@ -62,6 +63,19 @@ namespace FSTW_backend.Controllers
             await _service.FillDb(text, count, GetUserId());
             return Ok();
         }
+
+        //[HttpPost("requests")]
+        //public async Task<IActionResult> SendRequests([FromBody] string text)
+        //{
+        //    var list = new List<Task<string>>();
+        //    for (var i = 0; i < 10; i++)
+        //    {
+        //         list.Add(_service.SendRequests(text, _httpClient));
+        //    }
+        //    var results = await Task.WhenAll(list);
+        //    return Ok(results);
+        //}
+
 
         private int GetUserId()
         {

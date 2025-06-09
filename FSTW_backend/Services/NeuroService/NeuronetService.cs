@@ -139,7 +139,7 @@ namespace FSTW_backend.Services.Neuro
                 ["content"] = $"{question}"
             });
 
-            var response = await aiService.SendRequest(question, context);
+            var response = await aiService.SendRequestDS(question, context);
 
             if (response is null)
                 response = "Сервер не отвечает, попробуйте позже";
@@ -155,9 +155,9 @@ namespace FSTW_backend.Services.Neuro
             return ResponseResult<List<NeuronetDto>>.Success(history);
         }
 
-        public async Task<ResponseResult<List<NeuronetDto>>> GetResumeChatHistory(int userId, int count, int page)
+        public async Task<ResponseResult<List<NeuronetDto>>> GetResumeChatHistory(int userId, int resumeId, int count, int page)
         {
-            var history = await _neuroRepository.GetMessagesResumeHistory(userId, count, page);
+            var history = await _neuroRepository.GetMessagesResumeHistory(userId, resumeId, count, page);
             return ResponseResult<List<NeuronetDto>>.Success(history);
         }
 
@@ -166,5 +166,17 @@ namespace FSTW_backend.Services.Neuro
             await _neuroRepository.FillDb(message, count, userid);
         }
 
+        public async Task<string> SendRequests(string message, HttpClient client)
+        {
+            var aiService = new GptService(client);
+            var response = await aiService.SendRequest(message, new List<Dictionary<string, string>>()
+            {
+                new Dictionary<string, string>()
+                {
+                    ["user"] = message
+                }
+            });
+            return response;
+        }
     }
 }

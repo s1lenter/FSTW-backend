@@ -67,10 +67,10 @@ namespace FSTW_backend.Repositories.Neuro
             return dtosList;
         }
 
-        public async Task<List<NeuronetDto>> GetMessagesResumeHistory(int userId, int count, int page)
+        public async Task<List<NeuronetDto>> GetMessagesResumeHistory(int userId, int resumeId, int count, int page)
         {
             var x = await _context.ChatHistory
-                .Where(h => h.UserId == userId)
+                .Where(h => h.UserId == userId && h.ResumeId == resumeId)
                 .OrderByDescending(h => h.Id)
                 .Skip(count * (page - 1))
                 .Take(count)
