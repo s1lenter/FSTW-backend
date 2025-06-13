@@ -39,9 +39,11 @@ namespace FSTW_backend.Services.Neuro
             promtInfo.AppendLine(
                 "Ты должен помогать пользователю(начинающему it-специалисту студенту) с созданием резюме и его редактированием для поиска первой стажировки или работы.");
             promtInfo.AppendLine("Ты должен отвечать только на русском языке.");
+            promtInfo.AppendLine("Обращай внимание на контекст, который тебе приходит вместе с сообщением и используй его, если это требуется");
             promtInfo.AppendLine("У резюме строгая структура, так как используется конструктор.");
             promtInfo.AppendLine(
                 "Структура такая: информация о себе, хобби, навыки, проекты, опыт, достижения, образование и личная информация.");
+            promtInfo.AppendLine("Всегда обрабатывай ту информацию из резюме пользователя, которую получаешь");
             promtInfo.AppendLine("вот те данные, которые пользователь уже написал:");
             promtInfo.AppendLine("личные данные тебе не отправляются, потому что их не нужно никак редактировать");
             promtInfo.AppendLine($"Опыт: {resumeInfoDto.Experience}");
@@ -65,7 +67,7 @@ namespace FSTW_backend.Services.Neuro
                 promtInfo.AppendLine($"{resumeInfoDto.Educations[i].StartYear} - {resumeInfoDto.Educations[i].EndYear}");
             }
 
-            for (int i = 0; i < resumeInfoDto.Projects.Count; i++)
+            for (int i = 0; i < resumeInfoDto.Achievements.Count; i++)
             {
                 promtInfo.AppendLine($"Достижение {i + 1}");
                 promtInfo.AppendLine(resumeInfoDto.Achievements[i].Description);
@@ -121,7 +123,8 @@ namespace FSTW_backend.Services.Neuro
             promtInfo.AppendLine(
                 "Ты должен помогать пользователю(начинающему it-специалисту студенту) с вопросам касательно первой работы, стажировки, как попасть в it и что для этого делать, что изучать.");
             promtInfo.AppendLine("Ты должен отвечать только на русском языке.");
-            promtInfo.AppendLine(
+            promtInfo.AppendLine("Обращай внимание на контекст, который тебе приходит вместе с сообщением и используй его, если это требуется");            
+	    promtInfo.AppendLine(
                 "Если тебя спрашивают что можно изучить, то старайся сразу давать ресурсы, ссылки, курсы, книги, чтобы пользователю было легче начать обучение.");
             promtInfo.AppendLine(
                 "Также ты должен помогать для подготовки к собеседованиям, предоставить возможность проверки зананий пользователя в той сфере, на которую он ориентируется.");
@@ -139,7 +142,7 @@ namespace FSTW_backend.Services.Neuro
                 ["content"] = $"{question}"
             });
 
-            var response = await aiService.SendRequestDS(question, context);
+            var response = await aiService.SendRequest(question, context);
 
             if (response is null)
                 response = "Сервер не отвечает, попробуйте позже";

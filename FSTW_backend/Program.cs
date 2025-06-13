@@ -27,13 +27,13 @@ namespace FSTW_backend
                 options.AddPolicy("CorsPolicy",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost")
+                        policy.WithOrigins("http://87.228.100.176")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
                         options.AddPolicy("SwaggerPolicy", policy =>
                          {
-                             policy.WithOrigins("http://localhost:5072") 
+                             policy.WithOrigins("http://87.228.100.176:6123") 
                                    .AllowAnyHeader()
                                    .AllowAnyMethod();
                          });
@@ -62,8 +62,8 @@ namespace FSTW_backend
 
             builder.Services.AddAutoMapper(typeof(AppMapperProfile));
 
-            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); 
-            var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); 
+            //var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -107,6 +107,12 @@ namespace FSTW_backend
 
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                dbContext.Database.Migrate();
+            }
 
             app.Logger.LogInformation(connectionString);
 
