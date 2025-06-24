@@ -120,8 +120,8 @@ namespace FSTW_backend.Controllers
         [HttpGet("kontur")]
         public async Task<IActionResult> ParseKontur()
         {
-            await _konturParsingService.Parse();
-            return Ok();
+            var result = await _konturParsingService.Parse();
+            return Ok(result);
         }
     }
 }

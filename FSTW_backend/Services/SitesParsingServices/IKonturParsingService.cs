@@ -1,7 +1,9 @@
-﻿namespace FSTW_backend.Services.SitesParsingServices
+﻿using FSTW_backend.Models;
+
+namespace FSTW_backend.Services.SitesParsingServices
 {
     public interface IKonturParsingService
     {
-        public Task Parse();
+        public Task<List<Internship>> Parse();
     }
 }

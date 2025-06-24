@@ -25,11 +25,12 @@ namespace FSTW_backend.Services.SitesParsingServices
             _adminRepository = new AdminRepository(context);
         }
 
-        public async Task Parse()
+        public async Task<List<Internship>> Parse()
         {
             var result = await GetDataFromSite();
             if (result is not null)
                 await _adminRepository.AddVacanciesFromHh(result);
+            return result;
         }
 
         private async Task<List<Internship>> GetDataFromSite()

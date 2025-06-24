@@ -58,7 +58,7 @@ namespace FSTW_backend.Services.Auth
                 issuer: _configuration.GetValue<string>("AppSettings:Issuer"),
                 audience: _configuration.GetValue<string>("AppSettings:Audience"),
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(100),
+                expires: DateTime.UtcNow.AddDays(10),
                 signingCredentials: creds
                 );
 
